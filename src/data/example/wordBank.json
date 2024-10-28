@@ -1,0 +1,26 @@
+{
+  "id": "example-1",
+  "name": "Computer Science",
+  "numberOfWords": 100,
+  "units": [
+    {
+      "id": "1",
+      "name": "Unit 1",
+      "description": "Introduction to Computer Science",
+      "words": [
+        {
+          "id": "1",
+          "term": "Algorithm",
+          "definition": "A step-by-step procedure for solving a problem or accomplishing a task",
+          "examples": [
+            "Sorting algorithms",
+            "Search algorithms"
+          ],
+          "category": "Computer Science",
+          "difficulty": "MEDIUM",
+          "tags": ["programming", "basics"]
+        }
+      ]
+    }
+  ]
+}

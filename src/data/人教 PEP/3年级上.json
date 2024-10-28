@@ -1,0 +1,266 @@
+{
+  "id": "pep-3-1",
+  "name": "人教 PEP 3年级上",
+  "numberOfWords": 18,
+  "units": [
+    {
+      "id": "1",
+      "name": "Unit 1",
+      "description": "Making friends",
+      "words": [
+        {
+          "id": "1",
+          "term": "name",
+          "definition": "名字",
+          "examples": [
+            "What's your name?",
+            "My name is Tom.",
+            "Please write your name here."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2",
+          "term": "nice",
+          "definition": "令人愉快的; 友好的",
+          "examples": [
+            "It's nice to meet you.",
+            "You are very nice.",
+            "Have a nice day!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "ear",
+          "definition": "耳朵",
+          "examples": [
+            "I can hear with my ears.",
+            "The rabbit has long ears.",
+            "Clean your ears every day."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4",
+          "term": "hand",
+          "definition": "手",
+          "examples": [
+            "Wash your hands before eating.",
+            "Hold my hand.",
+            "Raise your hand if you know the answer."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "eye",
+          "definition": "眼睛",
+          "examples": [
+            "She has beautiful eyes.",
+            "Close your eyes.",
+            "Keep your eyes on the book."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "mouth",
+          "definition": "嘴",
+          "examples": [
+            "Open your mouth wide.",
+            "Don't talk with food in your mouth.",
+            "The fish opens its mouth."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "arm",
+          "definition": "胳膊",
+          "examples": [
+            "Raise your arms up.",
+            "The monkey has long arms.",
+            "He broke his arm."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "can",
+          "definition": "可以",
+          "examples": [
+            "I can swim.",
+            "Can you help me?",
+            "The bird can fly."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "share",
+          "definition": "分享",
+          "examples": [
+            "Share your toys with friends.",
+            "Let's share the cake.",
+            "It's good to share."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "smile",
+          "definition": "微笑; 笑",
+          "examples": [
+            "She has a beautiful smile.",
+            "Smile for the camera!",
+            "The baby smiled at me."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "listen",
+          "definition": "听; 倾听",
+          "examples": [
+            "Listen to the teacher.",
+            "I like to listen to music.",
+            "Please listen carefully."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "help",
+          "definition": "帮助",
+          "examples": [
+            "Can you help me?",
+            "I need your help.",
+            "Thank you for your help."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "say",
+          "definition": "说; 讲",
+          "examples": [
+            "What did you say?",
+            "Say it again, please.",
+            "He says hello."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "and",
+          "definition": "和; 与",
+          "examples": [
+            "Tom and Jerry",
+            "Boys and girls",
+            "Cats and dogs"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "goodbye",
+          "definition": "再见",
+          "examples": [
+            "Say goodbye to your friends.",
+            "Goodbye, see you tomorrow!",
+            "Time to say goodbye."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "toy",
+          "definition": "玩具",
+          "examples": [
+            "This is my favorite toy.",
+            "Put your toys away.",
+            "The toy store is fun."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "17",
+          "term": "friend",
+          "definition": "朋友",
+          "examples": [
+            "She is my best friend.",
+            "Let's be friends.",
+            "Friends help each other."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "18",
+          "term": "good",
+          "definition": "好的",
+          "examples": [
+            "Good morning!",
+            "You did a good job.",
+            "This is a good book."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Unit 2",
+      "description": "Different families",
+      "words": [
+        {
+          "id": "1",
+          "term": "father",
+          "definition": "父亲",
+          "examples": [
+            "What's your name?"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    }
+  ]
+}
