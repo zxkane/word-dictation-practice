@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Container, TextField, Typography, Switch, FormControlLabel, Box } from "@mui/material";
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word } from "@/types/wordBank";
+import PageLayout from "@/components/PageLayout";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
 
@@ -21,7 +22,7 @@ export default function DictationPage({ searchParams }: DictationProps) {
   const { units, wordBankId } = searchParams;
   // Add new state for tracking answers
   const [words, setWords] = useState<Array<Word>>([]);
-  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(words.length).fill(PLACEHOLDER));
+  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(1).fill(PLACEHOLDER));
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState("");
   const [speaking, setSpeaking] = useState(false);
@@ -47,6 +48,7 @@ export default function DictationPage({ searchParams }: DictationProps) {
         .flatMap((unit: { words: Word[] }) => unit.words);
     const shuffledWords = shuffleArray(allWords);
     setWords(shuffledWords);
+    setUserAnswers(new Array(shuffledWords.length).fill(PLACEHOLDER));
     
     // Play the first word after words are loaded
     if (shuffledWords.length > 0) {
@@ -174,59 +176,67 @@ export default function DictationPage({ searchParams }: DictationProps) {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Dictation Practice
-      </Typography>
-      
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-        <FormControlLabel
-          control={
-            <Switch
-              checked={showHints}
-              onChange={(e) => setShowHints(e.target.checked)}
-            />
-          }
-          label="Show Hints"
-        />
-      </Box>
-
-      {showHints && words[currentWordIndex] && (
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            mb: 2, 
-            p: 2, 
-            bgcolor: 'grey.100', 
-            borderRadius: 1,
-            fontStyle: 'italic'
-          }}
-        >
-          Hint: {words[currentWordIndex].definition}
+    <PageLayout>
+      <Box sx={{ 
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 1,
+        p: 4,
+        mb: 4
+      }}>
+        <Typography variant="h4" gutterBottom>
+          Dictation Practice
         </Typography>
-      )}
+        
+        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-      <TextField
-        fullWidth
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        onKeyPress={handleSubmit}
-        placeholder="Type the word you hear... (Press Enter to submit)"
-        autoFocus
-      />
-      {/* Add display for all answers */}
-      <Typography variant="body2" sx={{ mt: 2 }}>
-        Progress: {userAnswers.filter(answer => answer !== PLACEHOLDER).length} / {words.length} words attempted
-      </Typography>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showHints}
+                onChange={(e) => setShowHints(e.target.checked)}
+              />
+            }
+            label="Show Hints"
+          />
+        </Box>
 
-      {/* Display elapsed time */}
-      <Typography variant="body2" sx={{ mb: 2 }}>
-        Total Time Elapsed: {elapsedTime} seconds
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 2 }}>
-        Current Word Time Elapsed: {currentWordElapsedTime} seconds
-      </Typography>
-    </Container>
+        {showHints && words[currentWordIndex] && (
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              mb: 2, 
+              p: 2, 
+              bgcolor: 'grey.100', 
+              borderRadius: 1,
+              fontStyle: 'italic'
+            }}
+          >
+            Hint: {words[currentWordIndex].definition}
+          </Typography>
+        )}
+
+        <TextField
+          fullWidth
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          onKeyDown={handleSubmit}
+          placeholder="Type the word you hear... (Press Enter to submit)"
+          autoFocus
+        />
+        {/* Add display for all answers */}
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Progress: {userAnswers.filter(answer => answer !== PLACEHOLDER).length} / {words.length} words attempted
+        </Typography>
+
+        {/* Display elapsed time */}
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          Total Time Elapsed: {elapsedTime} seconds
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 2 }}>
+          Current Word Time Elapsed: {currentWordElapsedTime} seconds
+        </Typography>
+      </Box>
+    </PageLayout>
   );
 }
