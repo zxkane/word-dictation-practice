@@ -21,7 +21,7 @@ export default function DictationPage({ searchParams }: DictationProps) {
   const { units, wordBankId } = searchParams;
   // Add new state for tracking answers
   const [words, setWords] = useState<Array<Word>>([]);
-  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(words.length).fill(PLACEHOLDER));
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState("");
   const [speaking, setSpeaking] = useState(false);
@@ -48,9 +48,6 @@ export default function DictationPage({ searchParams }: DictationProps) {
     const shuffledWords = shuffleArray(allWords);
     setWords(shuffledWords);
     
-    // Initialize userAnswers array with the placeholder constant
-    setUserAnswers(new Array(shuffledWords.length).fill(PLACEHOLDER));
-      
     // Play the first word after words are loaded
     if (shuffledWords.length > 0) {
       setTimeout(() => {
@@ -58,7 +55,6 @@ export default function DictationPage({ searchParams }: DictationProps) {
       }, INITIAL_WORD_DELAY);
     }
 
-    console.log(words);
   }, [searchParams]);
 
   useEffect(() => {
@@ -73,6 +69,31 @@ export default function DictationPage({ searchParams }: DictationProps) {
       }
     };
   }, [currentWordIndex]);
+
+  useEffect(() => {
+    if (words.length > 0 && words.length == userAnswers.length &&
+       userAnswers.filter(answer => answer === PLACEHOLDER).length === 0) {
+      // practice completed
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+
+      // Calculate total characters typed
+      const totalChars = userAnswers.reduce((sum, answer) => sum + answer.length, 0);
+        
+      // Navigate to results page with data
+      const results = {
+        answers: userAnswers,
+        words: words,
+        elapsedTime,
+        totalChars,
+      };
+              
+      // Store results in sessionStorage to handle large datasets
+      sessionStorage.setItem('dictationResults', JSON.stringify(results));
+      window.location.href = '/results';
+    }
+  }, [userAnswers, words]);
 
   const shuffleArray = (array: Word[]) => {
     const newArray = [...array];
@@ -96,7 +117,6 @@ export default function DictationPage({ searchParams }: DictationProps) {
       return utterance;
     };
 
-    console.log('speaking ', words[index].term);
     const utterance = createUtterance(words[index].term);
     
     // Handle speech events
@@ -143,12 +163,12 @@ export default function DictationPage({ searchParams }: DictationProps) {
         // Reset current word timer
         setCurrentWordElapsedTime(0);
       } else {
-        // Practice completed
-        alert("Dictation practice completed!");
-        // Stop the elapsed timer
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-        }
+        // Store the last input when it's the last word
+        setUserAnswers(prev => {
+          const newAnswers = [...prev];
+          newAnswers[currentWordIndex] = userInput;
+          return newAnswers;
+        });
       }
     }
   };
