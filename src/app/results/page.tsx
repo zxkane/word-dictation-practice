@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Typography, Paper, Button, Box } from "@mui/material";
 import { Word } from "@/types/wordBank";
-import PageLayout from "@/components/PageLayout";
+import DashboardLayout from "@/components/DashboardLayout";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { BarChart, PieChart } from "@mui/x-charts";
 
@@ -25,7 +25,7 @@ export default function ResultsPage() {
   }, []);
 
   if (!results) {
-    return <PageLayout><Typography>Loading results...</Typography></PageLayout>;
+    return <DashboardLayout><Typography>Loading results...</Typography></DashboardLayout>;
   }
 
   const correctAnswers = results.answers.filter(
@@ -72,98 +72,100 @@ export default function ResultsPage() {
   }));
 
   return (
-    <PageLayout>
-      <Typography variant="h4" gutterBottom>
-        Practice Results
-      </Typography>
-
-      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-        <Paper sx={{ p: 3, flex: 1 }}>
-          <Typography variant="h6" gutterBottom>
-            Accuracy
-          </Typography>
-          <PieChart
-            series={[
-              {
-                data: pieData,
-                innerRadius: 60,
-                outerRadius: 80,
-                paddingAngle: 5,
-                highlightScope: { faded: 'global', highlighted: 'item' },
-              },
-            ]}
-            height={200}
-          />
-          <Typography align="center">
-            {correctRate.toFixed(1)}% Accuracy
-          </Typography>
-        </Paper>
-
-        <Paper sx={{ p: 3, flex: 1 }}>
-          <Typography variant="h6" gutterBottom>
-            Performance
-          </Typography>
-          <BarChart
-            series={[
-              {
-                data: barData.map(item => item.value),
-              },
-            ]}
-            xAxis={[
-              {
-                data: barData.map(item => item.label),
-                scaleType: 'band',
-              },
-            ]}
-            height={200}
-          />
-          <Typography align="center">
-            {typingSpeed} chars/min
-          </Typography>
-        </Paper>
-      </Box>
-
-      <Paper sx={{ p: 3, height: 'calc(100vh - 500px)', minHeight: '400px' }}>
-        <Typography variant="h6" gutterBottom>
-          Detailed Results
+    <DashboardLayout>
+      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+        <Typography variant="h4" gutterBottom>
+          Practice Results
         </Typography>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: { paginationModel: { pageSize: rows.length } },
-          }}
-          pageSizeOptions={[10, 25, 50, 100]}
-          sx={{
-            height: 'calc(100% - 40px)',
-            '& .success-row': {
-              bgcolor: 'success.light',
-            },
-            '& .error-row': {
-              bgcolor: 'error.light',
-            },
-          }}
-          getRowClassName={(params) => 
-            params.row.status ? 'success-row' : 'error-row'
-          }
-          disableRowSelectionOnClick
-        />
-      </Paper>
 
-      <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-        <Button 
-          variant="contained" 
-          onClick={() => window.location.href = '/'}
-        >
-          Back to Home
-        </Button>
-        <Button 
-          variant="outlined"
-          onClick={() => window.print()}
-        >
-          Print Results
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <Paper sx={{ p: 3, flex: 1 }}>
+            <Typography variant="h6" gutterBottom>
+              Accuracy
+            </Typography>
+            <PieChart
+              series={[
+                {
+                  data: pieData,
+                  innerRadius: 60,
+                  outerRadius: 80,
+                  paddingAngle: 5,
+                  highlightScope: { faded: 'global', highlighted: 'item' },
+                },
+              ]}
+              height={200}
+            />
+            <Typography align="center">
+              {correctRate.toFixed(1)}% Accuracy
+            </Typography>
+          </Paper>
+
+          <Paper sx={{ p: 3, flex: 1 }}>
+            <Typography variant="h6" gutterBottom>
+              Performance
+            </Typography>
+            <BarChart
+              series={[
+                {
+                  data: barData.map(item => item.value),
+                },
+              ]}
+              xAxis={[
+                {
+                  data: barData.map(item => item.label),
+                  scaleType: 'band',
+                },
+              ]}
+              height={200}
+            />
+            <Typography align="center">
+              {typingSpeed} chars/min
+            </Typography>
+          </Paper>
+        </Box>
+
+        <Paper sx={{ p: 3, height: 'calc(100vh - 500px)', minHeight: '400px' }}>
+          <Typography variant="h6" gutterBottom>
+            Detailed Results
+          </Typography>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: { paginationModel: { pageSize: rows.length } },
+            }}
+            pageSizeOptions={[10, 25, 50, 100]}
+            sx={{
+              height: 'calc(100% - 40px)',
+              '& .success-row': {
+                bgcolor: 'success.light',
+              },
+              '& .error-row': {
+                bgcolor: 'error.light',
+              },
+            }}
+            getRowClassName={(params) => 
+              params.row.status ? 'success-row' : 'error-row'
+            }
+            disableRowSelectionOnClick
+          />
+        </Paper>
+
+        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+          <Button 
+            variant="contained" 
+            onClick={() => window.location.href = '/'}
+          >
+            Back to Home
+          </Button>
+          <Button 
+            variant="outlined"
+            onClick={() => window.print()}
+          >
+            Print Results
+          </Button>
+        </Box>
       </Box>
-    </PageLayout>
+    </DashboardLayout>
   );
 } 

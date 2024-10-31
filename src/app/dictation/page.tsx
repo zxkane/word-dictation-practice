@@ -1,25 +1,58 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Container, TextField, Typography, Switch, FormControlLabel, Box } from "@mui/material";
+import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses } from "@mui/material";
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word } from "@/types/wordBank";
-import PageLayout from "@/components/PageLayout";
+import DashboardLayout from "@/components/DashboardLayout";
+import { Home } from '@mui/icons-material';
+import { Gauge } from '@mui/x-charts';
+import { STORAGE_KEYS } from "@/types/configuration";
+import { getStorageValue, addStorageListener } from "@/utils/storage";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
 
-interface DictationProps {
-  searchParams: { 
-    units: string; 
-    wordBankId: string;
-  };
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[200],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
+function LinearProgressWithLabel(props: { value: number }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <BorderLinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
 }
 
-export default function DictationPage({ searchParams }: DictationProps) {
+type SearchParams = {
+  units: string;
+  wordBankId: string;
+}
+
+export default function DictationPage( 
+  props: {
+    searchParams: SearchParams
+  }  
+) {
   const REPEAT_WORD_DELAY = 3000; // milliseconds
   const INITIAL_WORD_DELAY = 1000; // milliseconds
 
-  const { units, wordBankId } = searchParams;
+  const { units, wordBankId } = props.searchParams;
   // Add new state for tracking answers
   const [words, setWords] = useState<Array<Word>>([]);
   const [userAnswers, setUserAnswers] = useState<string[]>(new Array(1).fill(PLACEHOLDER));
@@ -27,8 +60,19 @@ export default function DictationPage({ searchParams }: DictationProps) {
   const [userInput, setUserInput] = useState("");
   const [speaking, setSpeaking] = useState(false);
 
-  // Add new states for hints
-  const [showHints, setShowHints] = useState(false);
+  // Update show hints state and add listener
+  const [showHints, setShowHints] = useState(() => 
+    getStorageValue(STORAGE_KEYS.SHOW_HINTS, false)
+  );
+
+  // Add storage listener
+  useEffect(() => {
+    const cleanup = addStorageListener<boolean>(STORAGE_KEYS.SHOW_HINTS, (newValue) => {
+      setShowHints(newValue);
+    });
+    
+    return cleanup; // Clean up listener when component unmounts
+  }, []);
 
   // Add queue state
   const [audioQueue, setAudioQueue] = useState<NodeJS.Timeout[]>([]);
@@ -57,7 +101,7 @@ export default function DictationPage({ searchParams }: DictationProps) {
       }, INITIAL_WORD_DELAY);
     }
 
-  }, [searchParams]);
+  }, [props.searchParams]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -175,46 +219,46 @@ export default function DictationPage({ searchParams }: DictationProps) {
     }
   };
 
+  // Add this function to format time
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <PageLayout>
-      <Box sx={{ 
-        bgcolor: 'background.paper',
-        borderRadius: 2,
-        boxShadow: 1,
-        p: 4,
-        mb: 4
-      }}>
-        <Typography variant="h4" gutterBottom>
-          Dictation Practice
-        </Typography>
-        
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showHints}
-                onChange={(e) => setShowHints(e.target.checked)}
-              />
-            }
-            label="Show Hints"
-          />
-        </Box>
-
-        {showHints && words[currentWordIndex] && (
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              mb: 2, 
-              p: 2, 
-              bgcolor: 'grey.100', 
-              borderRadius: 1,
-              fontStyle: 'italic'
-            }}
+    <DashboardLayout>
+      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
+          <Link
+            underline="hover"
+            sx={{ display: 'flex', alignItems: 'center' }}
+            color="inherit"
+            href="/"
           >
-            Hint: {words[currentWordIndex].definition}
-          </Typography>
-        )}
+            <Home sx={{ mr: 0.5 }} fontSize="inherit" />
+            Home
+          </Link>
+          <Typography color="text.primary">Dictation Practice</Typography>
+        </Breadcrumbs>
+
+        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {showHints && words[currentWordIndex] && words[currentWordIndex].definition && (
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                mb: 2, 
+                p: 2, 
+                bgcolor: 'grey.100', 
+                borderRadius: 1,
+                fontStyle: 'italic',
+                width: '100%'
+              }}
+            >
+              Hint(提示): {words[currentWordIndex].definition}
+            </Typography>
+          )}
+        </Box>
 
         <TextField
           fullWidth
@@ -225,18 +269,35 @@ export default function DictationPage({ searchParams }: DictationProps) {
           autoFocus
         />
         {/* Add display for all answers */}
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          Progress: {userAnswers.filter(answer => answer !== PLACEHOLDER).length} / {words.length} words attempted
-        </Typography>
+        <Box sx={{ width: '100%', mt: 2, mb: 2 }}>
+          <LinearProgressWithLabel 
+            value={(userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+          />
+        </Box>
 
-        {/* Display elapsed time */}
-        <Typography variant="body2" sx={{ mb: 2 }}>
-          Total Time Elapsed: {elapsedTime} seconds
-        </Typography>
-        <Typography variant="body2" sx={{ mb: 2 }}>
-          Current Word Time Elapsed: {currentWordElapsedTime} seconds
-        </Typography>
+        {/* Replace the Typography components for time with these Gauges */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 2 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="subtitle2">Total Time</Typography>
+            <Gauge
+              value={elapsedTime % 60}
+              valueMax={words.length * 30}
+              text={formatTime(elapsedTime)}
+              sx={{ width: 150, height: 150 }}
+            />
+          </Box>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="subtitle2">Current Word Time</Typography>
+            <Gauge
+              value={currentWordElapsedTime % 60}
+              valueMax={30}
+              text={formatTime(currentWordElapsedTime)}
+              sx={{ width: 150, height: 150 }}
+              startAngle={-90} endAngle={90}
+            />
+          </Box>
+        </Box>
       </Box>
-    </PageLayout>
+    </DashboardLayout>
   );
 }

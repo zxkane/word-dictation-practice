@@ -1,105 +1,88 @@
 "use client";
 
-import { useState } from "react";
-import { Typography, List, ListItem, ListItemText, Checkbox, Button, Box } from "@mui/material";
-import { grade3FirstSemester } from "@/utils/wordBank";
-import PageLayout from "@/components/PageLayout";
+import DashboardLayout from "@/components/DashboardLayout";
+import { Typography, Box, Card, CardHeader, CardContent, CardMedia, List, ListItem, ListItemText, ListItemAvatar, Avatar } from "@mui/material";
+import { useContext } from 'react';
+import { DrawerContext } from '@/components/DashboardLayout';
 
-export default function Home() {
-  const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
-
-  const handleToggle = (unitId: string) => () => {
-    const currentIndex = selectedUnits.indexOf(unitId);
-    const newChecked = [...selectedUnits];
-
-    if (currentIndex === -1) {
-      newChecked.push(unitId);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setSelectedUnits(newChecked);
-  };
-
-  const startDictationPractice = () => {
-    // Navigate to dictation page with selected units
-    window.location.href = `/dictation?units=${selectedUnits.join(",")}&wordBankId=${grade3FirstSemester.id}`;
-  };
+export default function HomePage() {
+  const { toggleDrawer } = useContext(DrawerContext);
 
   return (
-    <PageLayout>
-      <Typography 
-        variant="h4" 
-        gutterBottom 
-        sx={{ 
-          textAlign: 'center',
-          mb: 4
-        }}
-      >
-        Word Bank: {grade3FirstSemester.name}
-      </Typography>
-
-      <Typography 
-        variant="h6" 
-        gutterBottom
-        sx={{ 
-          textAlign: 'center',
-          mb: 3
-        }}
-      >
-        Select Units to Practice:
-      </Typography>
-
-      <List sx={{ 
-        width: '100%',
-        bgcolor: 'background.paper',
-        borderRadius: 2,
-        boxShadow: 1,
-        mb: 4
-      }}>
-        {grade3FirstSemester.units.map((unit) => (
-          <ListItem 
-            key={unit.id} 
-            onClick={handleToggle(unit.id)}
-            sx={{
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
-              transition: 'background-color 0.2s'
-            }}
-          >
-            <Checkbox
-              edge="start"
-              checked={selectedUnits.indexOf(unit.id) !== -1}
-              tabIndex={-1}
-              disableRipple
-            />
-            <ListItemText 
-              primary={unit.name} 
-              secondary={unit.description}
-              primaryTypographyProps={{
-                fontWeight: 500
+    <DashboardLayout>
+      <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+          Welcome to English Dictation Practice
+        </Typography>
+        
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <Card sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <CardContent sx={{ flex: '1 0 auto' }}>
+                <Typography component="div" variant="h5">
+                  关于本站点
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                  家里小朋友在家分享了在学校信息课上练习键盘打字。我们想到了一个有趣的主意 - 为什么不把打字练习变成一个有趣的英语听写游戏呢？这样不仅可以提高打字速度，还能增强英语听和拼写能力。一举多得，让学习变得更有趣！于是这个应用就诞生了。
+                </Typography>
+              </CardContent>
+            </Box>
+            <CardMedia
+              component="img"
+              sx={{ 
+                width: { xs: '100%', md: '40%' },
+                height: { xs: 200, md: 300 },
+                objectFit: 'cover'
               }}
+              image="/about-all.jpeg"
+              alt="Three Boys!!!"
             />
-          </ListItem>
-        ))}
-      </List>
+          </Card>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={startDictationPractice}
-          disabled={selectedUnits.length === 0}
-          sx={{ 
-            minWidth: 200,
-            py: 1.5
-          }}
-        >
-          Start Practice
-        </Button>
+          <Card>
+            <CardHeader title="如何使用" />
+            <CardContent>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>1</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText 
+                    primary={
+                      <Typography component="span">
+                        从菜单中选择
+                        <Typography
+                          component="span"
+                          sx={{
+                            cursor: 'pointer',
+                            color: 'primary.main',
+                            '&:hover': { textDecoration: 'underline' }
+                          }}
+                          onClick={toggleDrawer}
+                        >
+                          练习
+                        </Typography>
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>2</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="选择教材和单元（可选1个或多个）" />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: 'primary.main' }}>3</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="开始听写练习" />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Box>
       </Box>
-    </PageLayout>
+    </DashboardLayout>
   );
 }
