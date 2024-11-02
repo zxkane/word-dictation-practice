@@ -54,7 +54,7 @@ export default function WordBankPage() {
             <ListItem key={unit.id}>
               <Checkbox 
                 checked={selectedUnits.includes(unit.id)}
-                onChange={(e) => handleUnitToggle(unit.id)}
+                onChange={() => handleUnitToggle(unit.id)}
               />
               <ListItemText 
                 primary={`${unit.name} - ${unit.description}`}

@@ -25,7 +25,7 @@ export function getStorageValue<T>(key: string, defaultValue: T): T {
 }
 
 type StorageListener<T> = (newValue: T) => void;
-const listeners: { [key: string]: StorageListener<any>[] } = {};
+const listeners: { [key: string]: StorageListener<unknown>[] } = {};
 
 /**
  * Sets a value in localStorage with type safety
@@ -48,7 +48,7 @@ export const addStorageListener = <T,>(key: string, listener: StorageListener<T>
   if (!listeners[key]) {
     listeners[key] = [];
   }
-  listeners[key].push(listener);
+  listeners[key].push(listener as StorageListener<unknown>);
 
   // Return cleanup function
   return () => {

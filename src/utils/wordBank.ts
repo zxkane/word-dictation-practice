@@ -1,6 +1,7 @@
 import { WordBank } from '@/types/wordBank';
 
 export function getWordBank(wordBankPath: string): WordBank {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const wordBank = require(`@/data/${wordBankPath}`);
   return wordBank;
 }
