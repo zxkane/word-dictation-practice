@@ -246,15 +246,1241 @@
     },
     {
       "id": "2",
-      "name": "Unit 2",
+      "name": "Unit 2", 
       "description": "Different families",
       "words": [
         {
           "id": "1",
-          "term": "father",
-          "definition": "父亲",
+          "term": "mum",
+          "definition": "妈妈",
           "examples": [
-            "What's your name?"
+            "My mum makes delicious cookies.",
+            "Where is your mum?",
+            "I love my mum."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2", 
+          "term": "dad",
+          "definition": "爸爸",
+          "examples": [
+            "My dad drives me to school.",
+            "Dad, can you help me?",
+            "He is my dad."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "grandma",
+          "definition": "奶奶; 姥姥",
+          "examples": [
+            "My grandma lives with us.",
+            "Grandma makes the best pies.",
+            "Let's visit grandma today."
+          ],
+          "category": "English", 
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4",
+          "term": "grandpa",
+          "definition": "爷爷; 姥爷",
+          "examples": [
+            "Grandpa tells great stories.",
+            "I like fishing with grandpa.",
+            "Grandpa is very wise."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "grandfather",
+          "definition": "(外)祖父; 爷爷; 姥爷; 外公",
+          "examples": [
+            "My grandfather is very kind.",
+            "Grandfather taught me to play chess.",
+            "Visit your grandfather often."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "grandmother",
+          "definition": "(外)祖母; 奶奶; 姥姥; 外婆",
+          "examples": [
+            "Grandmother bakes cookies.",
+            "I love my grandmother's stories.",
+            "Let's call grandmother."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "mother",
+          "definition": "母亲; 妈妈",
+          "examples": [
+            "My mother is a teacher.",
+            "Mother knows best.",
+            "Thank you, mother."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "father",
+          "definition": "父亲; 爸爸",
+          "examples": [
+            "My father works hard.",
+            "Father came home late.",
+            "Like father, like son."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "me",
+          "definition": "我",
+          "examples": [
+            "Please help me.",
+            "Give it to me.",
+            "Look at me."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "sister",
+          "definition": "姐; 妹",
+          "examples": [
+            "My sister is older than me.",
+            "I have two sisters.",
+            "She is my little sister."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "family",
+          "definition": "家; 家庭",
+          "examples": [
+            "I love my family.",
+            "We are a happy family.",
+            "Family comes first."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "have",
+          "definition": "有",
+          "examples": [
+            "I have a sister.",
+            "Do you have a pet?",
+            "We have a big family."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "big",
+          "definition": "大的",
+          "examples": [
+            "I have a big family.",
+            "That's a big house.",
+            "My brother is big."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "cousin",
+          "definition": "堂(表)兄弟; 堂(表)姐妹",
+          "examples": [
+            "My cousin lives in London.",
+            "We visit our cousins every summer.",
+            "She is my favorite cousin."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "brother",
+          "definition": "哥; 弟",
+          "examples": [
+            "My brother is tall.",
+            "I have two brothers.",
+            "He is my little brother."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "baby",
+          "definition": "婴儿",
+          "examples": [
+            "The baby is crying.",
+            "What a cute baby!",
+            "The baby is sleeping."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "17",
+          "term": "uncle",
+          "definition": "伯父; 叔父; 舅父; 姑父; 姨父",
+          "examples": [
+            "My uncle is coming to visit.",
+            "Uncle Tom brings me presents.",
+            "I have three uncles."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "18",
+          "term": "aunt",
+          "definition": "伯母; 婶母; 舅母; 姑母; 姨母",
+          "examples": [
+            "My aunt is a doctor.",
+            "Aunt Mary makes delicious cakes.",
+            "We're visiting our aunt today."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "19",
+          "term": "some",
+          "definition": "一些",
+          "examples": [
+            "I have some brothers.",
+            "Would you like some candy?",
+            "There are some books on the table."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "20",
+          "term": "small",
+          "definition": "小的",
+          "examples": [
+            "This is a small family.",
+            "The baby is small.",
+            "I live in a small house."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Unit 3",
+      "description": "Amazing animals",
+      "words": [
+        {
+          "id": "1",
+          "term": "like",
+          "definition": "喜欢",
+          "examples": [
+            "I like animals.",
+            "Do you like dogs?",
+            "She likes to play with cats."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2",
+          "term": "dog",
+          "definition": "狗",
+          "examples": [
+            "The dog is barking.",
+            "I have a pet dog.",
+            "Dogs are friendly animals."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "pet",
+          "definition": "宠物",
+          "examples": [
+            "What's your favorite pet?",
+            "I have two pets at home.",
+            "Cats make good pets."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4",
+          "term": "cat",
+          "definition": "猫",
+          "examples": [
+            "The cat is sleeping.",
+            "My cat likes to play.",
+            "Black cats are beautiful."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "fish",
+          "definition": "鱼; 鱼肉",
+          "examples": [
+            "There are many fish in the pond.",
+            "I like to eat fish.",
+            "The fish is swimming."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "bird",
+          "definition": "鸟",
+          "examples": [
+            "Birds can fly.",
+            "I see a beautiful bird.",
+            "The bird is singing."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "rabbit",
+          "definition": "兔",
+          "examples": [
+            "The rabbit has long ears.",
+            "My pet rabbit is white.",
+            "Rabbits like carrots."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "go",
+          "definition": "去; 走",
+          "examples": [
+            "Let's go to the zoo.",
+            "Where do you want to go?",
+            "The bird can go fast."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "zoo",
+          "definition": "动物园",
+          "examples": [
+            "We saw many animals at the zoo.",
+            "The zoo is big.",
+            "Let's visit the zoo today."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "fox",
+          "definition": "狐狸",
+          "examples": [
+            "The fox is clever.",
+            "I saw a fox in the forest.",
+            "The fox has a red tail."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "Miss",
+          "definition": "(学生对女教师的称呼)老师; 女士",
+          "examples": [
+            "Good morning, Miss Lee.",
+            "Miss Smith is our teacher.",
+            "Thank you, Miss."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "panda",
+          "definition": "大熊猫",
+          "examples": [
+            "Pandas eat bamboo.",
+            "The panda is sleeping.",
+            "Pandas are from China."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "red panda",
+          "definition": "小熊猫",
+          "examples": [
+            "The red panda is cute.",
+            "Red pandas live in trees.",
+            "I saw a red panda at the zoo."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "cute",
+          "definition": "可爱的",
+          "examples": [
+            "What a cute puppy!",
+            "The baby panda is very cute.",
+            "She has a cute pet rabbit."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "monkey",
+          "definition": "猴子",
+          "examples": [
+            "The monkey is climbing trees.",
+            "Monkeys like bananas.",
+            "I saw many monkeys at the zoo."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "tiger",
+          "definition": "老虎",
+          "examples": [
+            "The tiger is a big cat.",
+            "Tigers are fast animals.",
+            "I saw a tiger at the zoo."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "17",
+          "term": "elephant",
+          "definition": "大象",
+          "examples": [
+            "The elephant is very big.",
+            "Elephants have long trunks.",
+            "Baby elephants are cute."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "18",
+          "term": "lion",
+          "definition": "狮; 狮子",
+          "examples": [
+            "The lion is the king of animals.",
+            "Lions are strong animals.",
+            "I hear the lion roar."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "19",
+          "term": "animal",
+          "definition": "动物",
+          "examples": [
+            "What's your favorite animal?",
+            "There are many animals at the zoo.",
+            "I like wild animals."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "20",
+          "term": "giraffe",
+          "definition": "长颈鹿",
+          "examples": [
+            "The giraffe has a long neck.",
+            "Giraffes are tall animals.",
+            "I saw a giraffe eating leaves."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "21",
+          "term": "tall",
+          "definition": "高的",
+          "examples": [
+            "The giraffe is very tall.",
+            "Basketball players are tall.",
+            "How tall are you?"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "22",
+          "term": "fast",
+          "definition": "快的",
+          "examples": [
+            "The cheetah runs fast.",
+            "Tigers are fast animals.",
+            "How fast can you run?"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Unit 4",
+      "description": "Plants around us",
+      "words": [
+        {
+          "id": "1",
+          "term": "apple",
+          "definition": "苹果",
+          "examples": [
+            "I eat an apple every day.",
+            "The apple is red and sweet.",
+            "There are many apples on the tree."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2",
+          "term": "banana",
+          "definition": "香蕉",
+          "examples": [
+            "Monkeys love bananas.",
+            "The banana is yellow.",
+            "I have a banana for breakfast."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "farm",
+          "definition": "农场",
+          "examples": [
+            "We live on a farm.",
+            "The farm has many animals.",
+            "They grow vegetables on the farm."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4",
+          "term": "air",
+          "definition": "空气",
+          "examples": [
+            "Plants need air to grow.",
+            "The air is fresh here.",
+            "Clean air is important."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "orange",
+          "definition": "橙子；柑橘",
+          "examples": [
+            "I like orange juice.",
+            "The orange is sweet.",
+            "There are oranges in the tree."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "grape",
+          "definition": "葡萄",
+          "examples": [
+            "These grapes are sweet.",
+            "The grapes grow in bunches.",
+            "I love eating grapes."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "school",
+          "definition": "学校",
+          "examples": [
+            "I go to school every day.",
+            "Our school has a garden.",
+            "The school is very big."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "garden",
+          "definition": "花园",
+          "examples": [
+            "We have a beautiful garden.",
+            "There are flowers in the garden.",
+            "Let's work in the garden."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "need",
+          "definition": "需要",
+          "examples": [
+            "Plants need water to grow.",
+            "Do you need help?",
+            "We need sunshine every day."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "water",
+          "definition": "给......浇水；水",
+          "examples": [
+            "Water the plants every day.",
+            "Plants need water to grow.",
+            "Clean water is important."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "flower",
+          "definition": "花；花朵",
+          "examples": [
+            "The flower is beautiful.",
+            "I like red flowers.",
+            "There are many flowers in spring."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "grass",
+          "definition": "草；草地",
+          "examples": [
+            "The grass is green.",
+            "Don't walk on the grass.",
+            "We play on the grass."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "plant",
+          "definition": "种植；植物",
+          "examples": [
+            "Let's plant some flowers.",
+            "Plants need water to grow.",
+            "This is a beautiful plant."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "new",
+          "definition": "新的",
+          "examples": [
+            "These are new plants.",
+            "I have a new garden.",
+            "Look at the new flowers!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "tree",
+          "definition": "树",
+          "examples": [
+            "The tree is very tall.",
+            "Birds live in the tree.",
+            "We plant new trees."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "sun",
+          "definition": "阳光；太阳",
+          "examples": [
+            "Plants need sun to grow.",
+            "The sun is bright today.",
+            "Let's play in the sun."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "17",
+          "term": "give",
+          "definition": "给",
+          "examples": [
+            "Give water to the plants.",
+            "Give me the flower, please.",
+            "Let's give them some fruit."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "18",
+          "term": "us",
+          "definition": "我们",
+          "examples": [
+            "Give us some apples.",
+            "Help us water the plants.",
+            "Join us in the garden."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "19",
+          "term": "them",
+          "definition": "它们；他们；她们",
+          "examples": [
+            "Give them some water.",
+            "Help them grow.",
+            "Look at them grow!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Unit 5",
+      "description": "The colourful world",
+      "words": [
+        {
+          "id": "1",
+          "term": "colour",
+          "definition": "颜色",
+          "examples": [
+            "What's your favorite colour?",
+            "This picture has many colours.",
+            "Let's learn about colours today."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2",
+          "term": "orange",
+          "definition": "橙红色；橙红色的",
+          "examples": [
+            "The sunset is orange.",
+            "I like orange carrots.",
+            "The orange balloon is pretty."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "green",
+          "definition": "绿色；绿色的",
+          "examples": [
+            "The grass is green.",
+            "I like green trees.",
+            "This is a green apple."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4", 
+          "term": "red",
+          "definition": "红色；红色的",
+          "examples": [
+            "The rose is red.",
+            "Stop at the red light.",
+            "My favorite color is red."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "blue",
+          "definition": "蓝色；蓝色的", 
+          "examples": [
+            "The sky is blue.",
+            "I have a blue pen.",
+            "The ocean looks blue."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "make",
+          "definition": "使出现；做",
+          "examples": [
+            "Let's make a rainbow.",
+            "Can you make this colour?",
+            "Make a picture with colours."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "purple",
+          "definition": "紫色；紫色的",
+          "examples": [
+            "The grape is purple.",
+            "I like purple flowers.",
+            "She wears a purple dress."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "brown",
+          "definition": "棕色；棕色的",
+          "examples": [
+            "The tree trunk is brown.",
+            "Bears are brown.",
+            "I see brown leaves."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "bear",
+          "definition": "熊",
+          "examples": [
+            "The bear is big.",
+            "Bears like honey.",
+            "Look at the brown bear!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "yellow",
+          "definition": "黄色；黄色的",
+          "examples": [
+            "The sun is yellow.",
+            "Bananas are yellow.",
+            "I see a yellow butterfly."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "duck",
+          "definition": "鸭",
+          "examples": [
+            "The duck is swimming.",
+            "Ducks like water.",
+            "Look at the yellow duck!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "sea",
+          "definition": "海；海洋",
+          "examples": [
+            "The sea is blue.",
+            "Fish live in the sea.",
+            "Let's go to the sea."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "pink",
+          "definition": "粉色；粉色的",
+          "examples": [
+            "The flower is pink.",
+            "She likes pink dresses.",
+            "Look at the pink sunset!"
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "draw",
+          "definition": "画",
+          "examples": [
+            "Draw a picture.",
+            "I can draw a rainbow.",
+            "Let's draw together."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "white",
+          "definition": "白色；白色的",
+          "examples": [
+            "The clouds are white.",
+            "Snow is white.",
+            "I see a white bird."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "black",
+          "definition": "黑色；黑色的",
+          "examples": [
+            "The night is black.",
+            "I have black shoes.",
+            "Write with black ink."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Unit 6",
+      "description": "Useful numbers",
+      "words": [
+        {
+          "id": "1",
+          "term": "old",
+          "definition": "(多少)岁；年纪；旧的",
+          "examples": [
+            "How old are you?",
+            "This is an old book.",
+            "She is eight years old."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "2",
+          "term": "five",
+          "definition": "五",
+          "examples": [
+            "I have five pencils.",
+            "She is five years old.",
+            "Give me five apples."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "3",
+          "term": "year",
+          "definition": "年纪；年",
+          "examples": [
+            "Happy New Year!",
+            "I am eight years old.",
+            "This is a new year."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "4",
+          "term": "one",
+          "definition": "一",
+          "examples": [
+            "I have one book.",
+            "One plus one is two.",
+            "Give me one apple."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "5",
+          "term": "two",
+          "definition": "二",
+          "examples": [
+            "I have two hands.",
+            "Two plus two is four.",
+            "There are two birds."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "6",
+          "term": "three",
+          "definition": "三",
+          "examples": [
+            "I have three pets.",
+            "Count to three.",
+            "Three little pigs."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "7",
+          "term": "four",
+          "definition": "四",
+          "examples": [
+            "I have four books.",
+            "Four seasons in a year.",
+            "Count: one, two, three, four."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "8",
+          "term": "ten",
+          "definition": "十",
+          "examples": [
+            "I have ten fingers.",
+            "Count to ten.",
+            "Ten little monkeys."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "9",
+          "term": "six",
+          "definition": "六",
+          "examples": [
+            "I have six crayons.",
+            "Count: five, six.",
+            "Six little ducks."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "10",
+          "term": "seven",
+          "definition": "七",
+          "examples": [
+            "Seven days in a week.",
+            "Count to seven.",
+            "I have seven books."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "11",
+          "term": "eight",
+          "definition": "八",
+          "examples": [
+            "I am eight years old.",
+            "Count: seven, eight.",
+            "Eight little fish."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "12",
+          "term": "nine",
+          "definition": "九",
+          "examples": [
+            "Nine planets in space.",
+            "Count to nine.",
+            "I have nine markers."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "13",
+          "term": "o'clock",
+          "definition": "(表示整点)...点钟",
+          "examples": [
+            "It's three o'clock.",
+            "School starts at eight o'clock.",
+            "What time is it? It's five o'clock."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "14",
+          "term": "cut",
+          "definition": "切块",
+          "examples": [
+            "Cut the cake.",
+            "Don't cut yourself.",
+            "Help me cut this paper."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "15",
+          "term": "eat",
+          "definition": "吃",
+          "examples": [
+            "Let's eat cake.",
+            "Time to eat lunch.",
+            "Don't eat too fast."
+          ],
+          "category": "English",
+          "difficulty": "EASY",
+          "tags": []
+        },
+        {
+          "id": "16",
+          "term": "cake",
+          "definition": "蛋糕",
+          "examples": [
+            "Happy birthday cake!",
+            "I like chocolate cake.",
+            "Let's share the cake."
           ],
           "category": "English",
           "difficulty": "EASY",
