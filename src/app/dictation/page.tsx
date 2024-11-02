@@ -7,8 +7,9 @@ import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Home } from '@mui/icons-material';
 import { Gauge } from '@mui/x-charts';
-import { STORAGE_KEYS } from "@/types/configuration";
+import { DEFAULT_PLAY_SPEED, STORAGE_KEYS } from "@/types/configuration";
 import { getStorageValue, addStorageListener } from "@/utils/storage";
+import { PLAY_SPEEDS } from "@/types/configuration";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
 
@@ -80,6 +81,34 @@ export default function DictationPage(
   // Add new state for tracking elapsed time
   const [elapsedTime, setElapsedTime] = useState(0);
   const [currentWordElapsedTime, setCurrentWordElapsedTime] = useState(0);
+
+  // Add new state for speech rate
+  const [speechRate, setSpeechRate] = useState(() => 
+    getStorageValue(STORAGE_KEYS.PLAY_SPEED, DEFAULT_PLAY_SPEED.value)
+  );
+
+  // Add storage listener for speech rate
+  useEffect(() => {
+    const cleanup = addStorageListener<number>(STORAGE_KEYS.PLAY_SPEED, (newValue) => {
+      setSpeechRate(newValue);
+    });
+    
+    return cleanup;
+  }, []);
+
+  // Add new state for play times
+  const [playTimes, setPlayTimes] = useState(() => 
+    getStorageValue(STORAGE_KEYS.PLAY_TIMES, 2) // Default to 2 times if not set
+  );
+
+  // Add storage listener for play times
+  useEffect(() => {
+    const cleanup = addStorageListener<number>(STORAGE_KEYS.PLAY_TIMES, (newValue) => {
+      setPlayTimes(newValue);
+    });
+    
+    return cleanup;
+  }, []);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -153,13 +182,14 @@ export default function DictationPage(
   const playCurrentWord = (words: Word[], index: number) => {
     if (speaking) return;
     
-    // Clear existing queue
     clearAudioQueue();
 
     const createUtterance = (text: string) => {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US'; // Set language (can be changed based on your needs)
-      utterance.rate = 0.6; // Slightly slower speed (default is 1)
+      
+      utterance.lang = 'en-US';
+      utterance.rate = speechRate;
+      utterance.volume = 1.0;
       return utterance;
     };
 
@@ -169,14 +199,25 @@ export default function DictationPage(
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => {
       setSpeaking(false);
-      // Queue the second utterance
-      const timeoutId = setTimeout(() => {
-        const secondUtterance = createUtterance(words[index].term);
-        window.speechSynthesis.speak(secondUtterance);
-      }, REPEAT_WORD_DELAY);
       
-      // Add to queue
-      setAudioQueue(prev => [...prev, timeoutId]);
+      // Queue additional utterances based on playTimes setting
+      let playCount = 1;
+      const queueNextUtterance = () => {
+        if (playCount < playTimes) {
+          const timeoutId = setTimeout(() => {
+            const nextUtterance = createUtterance(words[index].term);
+            window.speechSynthesis.speak(nextUtterance);
+            playCount++;
+            if (playCount < playTimes) {
+              queueNextUtterance();
+            }
+          }, REPEAT_WORD_DELAY);
+          
+          setAudioQueue(prev => [...prev, timeoutId]);
+        }
+      };
+      
+      queueNextUtterance();
     };
 
     window.speechSynthesis.speak(utterance);

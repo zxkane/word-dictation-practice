@@ -60,9 +60,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [playTimes, setPlayTimes] = useState(() => 
     getStorageValue(STORAGE_KEYS.PLAY_TIMES, 2)
   );
-  const [playSpeed, setPlaySpeed] = useState<PlaySpeedOption>(() => 
-    getStorageValue(STORAGE_KEYS.PLAY_SPEED, DEFAULT_PLAY_SPEED)
-  );
+  const [playSpeed, setPlaySpeed] = useState<PlaySpeedOption>(() =>  {
+    const playSpeed = getStorageValue(STORAGE_KEYS.PLAY_SPEED, DEFAULT_PLAY_SPEED.value);
+    return PLAY_SPEEDS.find(speed => speed.value === playSpeed) || DEFAULT_PLAY_SPEED;
+  });
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -88,7 +89,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handlePlaySpeedChange = (speed: PlaySpeedOption) => {
     setPlaySpeed(speed);
-    setStorageValue(STORAGE_KEYS.PLAY_SPEED, speed);
+    setStorageValue(STORAGE_KEYS.PLAY_SPEED, speed.value);
   };
 
   const drawer = (
