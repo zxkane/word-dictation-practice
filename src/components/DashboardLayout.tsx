@@ -14,8 +14,6 @@ import {
   ListItemIcon,
   ListItemText,
   Collapse,
-  FormControlLabel,
-  Switch,
   Button,
   ButtonGroup,
 } from '@mui/material';
@@ -42,6 +40,7 @@ import {
   FastForward 
 } from '@mui/icons-material';
 import { getStorageValue, setStorageValue } from '@/utils/storage';
+import { School } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -94,6 +93,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const drawer = (
     <Box sx={{ mt: 2 }}>
+      <Box sx={{ px: 2, mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <School sx={{ color: 'primary.main', fontSize: 32 }} />
+        <Box>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+            English Dictation
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            英语听写及打字练习
+          </Typography>
+        </Box>
+      </Box>
+
       <List>
         <ListItem disablePadding>
           <ListItemButton href="/">
@@ -162,7 +173,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               English Dictation Practice
               <Typography variant="subtitle2" component="div">
-                英语听写练习
+                英语听写及打字练习
               </Typography>
             </Typography>
             <IconButton color="inherit" onClick={toggleSettings}>

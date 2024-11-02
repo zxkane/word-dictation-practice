@@ -9,7 +9,6 @@ import { Home } from '@mui/icons-material';
 import { Gauge } from '@mui/x-charts';
 import { DEFAULT_PLAY_SPEED, STORAGE_KEYS } from "@/types/configuration";
 import { getStorageValue, addStorageListener } from "@/utils/storage";
-import { PLAY_SPEEDS } from "@/types/configuration";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
 

@@ -1,3 +1,5 @@
+'use client';
+
 import localFont from "next/font/local";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -9,14 +11,16 @@ import "./globals.css";
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { lightGreen, pink } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4caf50',
+      main: lightGreen[400],
     },
     secondary: {
-      main: '#f50057',
+      main: pink[300],
     },
   },
   components: {
@@ -50,11 +54,16 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-icon?<generated>" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
           {children}
+        </ThemeProvider>
       </body>
     </html>
   );
