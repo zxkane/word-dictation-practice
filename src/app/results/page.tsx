@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Typography, Paper, Button, Box } from "@mui/material";
+import { Typography, Paper, Button, Box, CircularProgress } from "@mui/material";
 import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -25,7 +25,23 @@ export default function ResultsPage() {
   }, []);
 
   if (!results) {
-    return <DashboardLayout><Typography>Loading results...</Typography></DashboardLayout>;
+    return (
+      <DashboardLayout>
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            minHeight: '50vh',
+            flexDirection: 'column',
+            gap: 2
+          }}
+        >
+          <CircularProgress />
+          <Typography>Loading results...</Typography>
+        </Box>
+      </DashboardLayout>
+    );
   }
 
   const correctAnswers = results.answers.filter(
