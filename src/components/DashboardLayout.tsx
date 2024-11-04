@@ -199,10 +199,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           anchor="right"
           open={settingsOpen}
           onClose={toggleSettings}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: { xs: '100%', sm: 400 },
+              maxWidth: '100%',
+              boxSizing: 'border-box',
+            }
+          }}
         >
           <Box sx={{ 
-            width: { xs: '100%', sm: 468 }, 
-            p: 3 
+            width: '100%', 
+            p: { xs: 2, sm: 3 }
           }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 2, borderBottom: 1, borderColor: 'divider' }}>
               <Typography variant="body1">

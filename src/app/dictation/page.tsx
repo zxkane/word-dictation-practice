@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, ListSubheader, MenuItem, Chip } from "@mui/material";
+import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, ListSubheader, MenuItem, Chip, Button } from "@mui/material";
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -129,11 +129,50 @@ const getVoiceGender = (voice: SpeechSynthesisVoice) => {
   return { gender: 'Unknown', icon: '🔊' };
 };
 
-export default function DictationPage( 
-  props: {
-    searchParams: SearchParams
-  }  
-) {
+// Add the SoftKeyboard component
+function SoftKeyboard(props: { 
+  onKeyPress: (key: string) => void,
+  pressedKey: string | null
+}) {
+
+  const keys = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["Z", "X", "C", "V", "B", "N", "M"],
+    ["SPACE", "BACKSPACE"],
+  ];
+
+  return (
+    <Box sx={{ mt: 2 }}>
+      {keys.map((row, rowIndex) => (
+        <Box
+          key={rowIndex}
+          sx={{ display: "flex", justifyContent: "center", mb: 1 }}
+        >
+          {row.map((key) => (
+            <Button
+              key={key}
+              variant="outlined"
+              sx={{ 
+                minWidth: 40, 
+                mx: 0.5,
+                bgcolor: props.pressedKey === key ? 'primary.dark' : 'transparent',
+              }}
+            >
+              {key === "SPACE"
+                ? "Space"
+                : key === "BACKSPACE"
+                ? "Backspace"
+                : key}
+            </Button>
+          ))}
+        </Box>
+      ))}
+    </Box>
+  );
+}
+
+export default function DictationPage(props: { searchParams: SearchParams }) {
   const REPEAT_WORD_DELAY = 3000; // milliseconds
   const INITIAL_WORD_DELAY = 1000; // milliseconds
 
@@ -416,9 +455,56 @@ export default function DictationPage(
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  // Add state to control the display of the soft keyboard
+  const [showSoftKeyboard, setShowSoftKeyboard] = useState(true);
+
+  // Add new state to track the currently pressed key
+  const [pressedKey, setPressedKey] = useState<string | null>(null);
+
+  // Add keydown and keyup event handlers
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key.toUpperCase();
+      if (key === ' ') {
+        setPressedKey('SPACE');
+      } else if (key === 'BACKSPACE') {
+        setPressedKey('BACKSPACE');
+      } else {
+        setPressedKey(key);
+      }
+    };
+
+    const handleKeyUp = () => {
+      setPressedKey(null);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
+  const handleSoftKeyPress = (key: string) => {
+    if (key === "BACKSPACE") {
+      setUserInput(prev => prev.slice(0, -1));
+    } else {
+      setUserInput(prev => prev + key);
+    }
+  };
+
   return (
     <DashboardLayout>
-      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+      <Box sx={{ 
+        width: '100%',
+        maxWidth: { xs: 320, sm: 800 }, // Narrower on mobile
+        mx: 'auto',
+        px: { xs: 0.5, sm: 3 }, // Minimal padding on mobile
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
+      }}>
         <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
           <Link
             underline="hover"
@@ -467,21 +553,42 @@ export default function DictationPage(
             onKeyDown={handleSubmit}
             placeholder="Type the word you hear... (Press Enter to submit) | 输入你听到的单词...（按回车键提交）"
             autoFocus
+            onFocus={() => setShowSoftKeyboard(true)}
+            autoComplete="off"
           />
-            <LinearProgressWithLabel 
-              value={(words.length == 0 ? 0 : userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+
+          <LinearProgressWithLabel 
+            value={(words.length == 0 ? 0 : userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+          />
+
+          {/* Display the soft keyboard */}
+          {showSoftKeyboard && (
+            <SoftKeyboard
+              onKeyPress={handleSoftKeyPress}
+              pressedKey={pressedKey}
             />
+          )}
         </Paper>
 
-        {/* Replace the Typography components for time with these Gauges */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 2 }}>
+        {/* Update the Gauges container for better mobile display */}
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', sm: 'row' }, // Stack vertically on mobile
+          alignItems: 'center',
+          justifyContent: 'space-around', 
+          mb: 2,
+          gap: 2 // Add gap between stacked items
+        }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="subtitle2">Total Time</Typography>
             <Gauge
               value={elapsedTime % 60}
               valueMax={words.length * 30}
               text={formatTime(elapsedTime)}
-              sx={{ width: 150, height: 150 }}
+              sx={{ 
+                width: { xs: 120, sm: 150 }, // Smaller on mobile
+                height: { xs: 120, sm: 150 }
+              }}
             />
           </Box>
           <Box sx={{ textAlign: 'center' }}>
@@ -490,8 +597,12 @@ export default function DictationPage(
               value={currentWordElapsedTime % 60}
               valueMax={30}
               text={formatTime(currentWordElapsedTime)}
-              sx={{ width: 150, height: 150 }}
-              startAngle={-90} endAngle={90}
+              sx={{ 
+                width: { xs: 120, sm: 150 }, // Smaller on mobile
+                height: { xs: 120, sm: 150 }
+              }}
+              startAngle={-90} 
+              endAngle={90}
             />
           </Box>
         </Box>
