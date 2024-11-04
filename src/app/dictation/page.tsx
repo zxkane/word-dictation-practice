@@ -469,7 +469,7 @@ export default function DictationPage(
             autoFocus
           />
             <LinearProgressWithLabel 
-              value={(userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+              value={(words.length == 0 ? 0 : userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
             />
         </Paper>
 
