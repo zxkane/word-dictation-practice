@@ -93,11 +93,17 @@ export default function ResultsPage() {
         <Typography variant="h4" gutterBottom>
           Practice Results
         </Typography>
+        <Typography variant="h5" color="text.secondary" gutterBottom>
+          练习结果
+        </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <Paper sx={{ p: 3, flex: 1 }}>
             <Typography variant="h6" gutterBottom>
               Accuracy
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+              准确率
             </Typography>
             <PieChart
               series={[
@@ -120,6 +126,9 @@ export default function ResultsPage() {
             <Typography variant="h6" gutterBottom>
               Performance
             </Typography>
+            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+              表现
+            </Typography>
             <BarChart
               series={[
                 {
@@ -140,25 +149,49 @@ export default function ResultsPage() {
           </Paper>
         </Box>
 
-        <Paper sx={{ p: 3, height: 'calc(100vh - 500px)', minHeight: '400px' }}>
+        <Paper sx={{ p: 3, height: 'auto', minHeight: '500px' }}>
           <Typography variant="h6" gutterBottom>
             Detailed Results
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            详细结果
           </Typography>
           <DataGrid
             rows={rows}
             columns={columns}
             initialState={{
-              pagination: { paginationModel: { pageSize: rows.length } },
+              pagination: { 
+                paginationModel: { 
+                  pageSize: 25,
+                  page: 0
+                } 
+              },
             }}
             pageSizeOptions={[10, 25, 50, 100]}
+            pagination={true}
             sx={{
               height: 'calc(100% - 40px)',
               '& .success-row': {
                 bgcolor: 'success.light',
+                '&:hover': {
+                  bgcolor: 'success.main',
+                  opacity: 0.8,
+                }
               },
               '& .error-row': {
                 bgcolor: 'error.light',
+                '&:hover': {
+                  bgcolor: 'error.main',
+                  opacity: 0.8,
+                }
               },
+              '& .MuiDataGrid-footerContainer': {
+                bgcolor: 'white',
+                '& .MuiTablePagination-root': {
+                  color: (theme) => 
+                    correctRate >= 50 ? theme.palette.success.main : theme.palette.error.main,
+                }
+              }
             }}
             getRowClassName={(params) => 
               params.row.status ? 'success-row' : 'error-row'
@@ -173,12 +206,18 @@ export default function ResultsPage() {
             onClick={() => window.location.href = '/'}
           >
             Back to Home
+            <Typography variant="caption" display="block" sx={{ opacity: 0.7 }}>
+              返回主页
+            </Typography>
           </Button>
           <Button 
             variant="outlined"
             onClick={() => window.print()}
           >
             Print Results
+            <Typography variant="caption" display="block" sx={{ opacity: 0.7 }}>
+              打印结果
+            </Typography>
           </Button>
         </Box>
       </Box>

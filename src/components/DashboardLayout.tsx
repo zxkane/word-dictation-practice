@@ -26,12 +26,15 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 import { grade3FirstSemester } from "@/utils/wordBank";
-import { Lightbulb } from '@mui/icons-material';
+import { Female, Lightbulb, Male } from '@mui/icons-material';
 import { 
   PlaySpeedOption, 
   PLAY_SPEEDS, 
   DEFAULT_PLAY_SPEED,
-  STORAGE_KEYS 
+  STORAGE_KEYS, 
+  VOICE_OPTIONS,
+  DEFAULT_VOICE,
+  type VoiceOption
 } from "@/types/configuration";
 import { 
   Speed,
@@ -41,6 +44,7 @@ import {
 } from '@mui/icons-material';
 import { getStorageValue, setStorageValue } from '@/utils/storage';
 import { School } from '@mui/icons-material';
+import { Group } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -62,6 +66,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [playSpeed, setPlaySpeed] = useState<PlaySpeedOption>(() =>  {
     const playSpeed = getStorageValue(STORAGE_KEYS.PLAY_SPEED, DEFAULT_PLAY_SPEED.value);
     return PLAY_SPEEDS.find(speed => speed.value === playSpeed) || DEFAULT_PLAY_SPEED;
+  });
+  const [playbackVoice, setPlaybackVoice] = useState<VoiceOption>(() => {
+    const savedVoice = getStorageValue(STORAGE_KEYS.VOICE_GENDER, DEFAULT_VOICE.value);
+    return VOICE_OPTIONS.find(voice => voice.value === savedVoice) || DEFAULT_VOICE;
   });
 
   const toggleDrawer = () => {
@@ -89,6 +97,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const handlePlaySpeedChange = (speed: PlaySpeedOption) => {
     setPlaySpeed(speed);
     setStorageValue(STORAGE_KEYS.PLAY_SPEED, speed.value);
+  };
+
+  const handlePlaybackVoiceChange = (voice: VoiceOption) => {
+    setPlaybackVoice(voice);
+    setStorageValue(STORAGE_KEYS.VOICE_GENDER, voice.value);
   };
 
   const drawer = (
@@ -272,7 +285,46 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 })}
               </ButtonGroup>
             </Box>
-            
+            <Typography variant="body1" sx={{ mt: 3 }}>
+              Playback Voice
+              <Typography variant="body2" component="div">
+                播放声音
+              </Typography>
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              <ButtonGroup variant="outlined" aria-label="playback voice">
+                {VOICE_OPTIONS.map((voice) => {
+                  const getVoiceIcon = () => {
+                    switch (voice.label) {
+                      case 'all':
+                        return <Group />;
+                      case 'male':
+                        return <Male />;
+                      case 'female':
+                        return <Female />;
+                      default:
+                        return <Group />;
+                    }
+                  };
+
+                  return (
+                    <Button
+                      key={voice.value}
+                      variant={playbackVoice.value === voice.value ? "contained" : "outlined"}
+                      onClick={() => handlePlaybackVoiceChange(voice)}
+                      color="primary"
+                      startIcon={getVoiceIcon()}
+                      sx={{ 
+                        textTransform: 'capitalize',
+                        minWidth: '120px'
+                      }}
+                    >
+                      {voice.description}
+                    </Button>
+                  );
+                })}
+              </ButtonGroup>
+            </Box>
           </Box>
         </Drawer>
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses } from "@mui/material";
+import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, ListSubheader, MenuItem, Chip } from "@mui/material";
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Home } from '@mui/icons-material';
 import { Gauge } from '@mui/x-charts';
-import { DEFAULT_PLAY_SPEED, STORAGE_KEYS } from "@/types/configuration";
+import { DEFAULT_PLAY_SPEED, STORAGE_KEYS, VOICE_GENDER_OPTIONS, type VoiceGenderOption } from "@/types/configuration";
 import { getStorageValue, addStorageListener } from "@/utils/storage";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
@@ -43,6 +43,91 @@ type SearchParams = {
   units: string;
   wordBankId: string;
 }
+
+// Update the recommended voices constant
+const RECOMMENDED_VOICES = [
+  {
+    name: 'Microsoft David',
+    description: 'Clear American male voice, moderate speed',
+    gender: 'Male' as const,
+    icon: '👨'
+  },
+  {
+    name: 'Microsoft Zira',
+    description: 'Clear American female voice, ideal for learning',
+    gender: 'Female' as const,
+    icon: '👩'
+  },
+  {
+    name: 'Google US English',
+    description: 'Google\'s accurate American female voice',
+    gender: 'Female' as const,
+    icon: '👩'
+  },
+  {
+    name: 'Samantha',
+    description: 'High-quality macOS female voice, natural tone',
+    gender: 'Female' as const,
+    icon: '👩'
+  },
+  {
+    name: 'Daniel',
+    description: 'High-quality macOS male voice, standard pronunciation',
+    gender: 'Male' as const,
+    icon: '👨'
+  },
+  {
+    name: 'Microsoft Mark',
+    description: 'Clear British male voice, excellent pronunciation',
+    gender: 'Male' as const,
+    icon: '👨'
+  },
+  {
+    name: 'Microsoft Hazel',
+    description: 'Professional British female voice, clear diction',
+    gender: 'Female' as const,
+    icon: '👩'
+  },
+  {
+    name: 'Alex',
+    description: 'High-quality macOS male voice, natural rhythm',
+    gender: 'Male' as const,
+    icon: '👨'
+  },
+  {
+    name: 'Victoria',
+    description: 'Clear Australian female voice, consistent pace',
+    gender: 'Female' as const,
+    icon: '👩'
+  },
+  {
+    name: 'Karen',
+    description: 'Australian female voice, excellent clarity',
+    gender: 'Female' as const,
+    icon: '👩'
+  }
+] as const;
+
+// Update helper function
+const getVoiceGender = (voice: SpeechSynthesisVoice) => {
+  // Find matching recommended voice first
+  const recommendedVoice = RECOMMENDED_VOICES.find(rec => 
+    voice.name.includes(rec.name)
+  );
+  
+  if (recommendedVoice) {
+    return { gender: recommendedVoice.gender, icon: recommendedVoice.icon };
+  }
+
+  // Fallback to existing logic for non-recommended voices
+  if (voice.name.toLowerCase().includes('male')) {
+    return { gender: 'Male', icon: '👨' };
+  }
+  if (voice.name.toLowerCase().includes('female')) {
+    return { gender: 'Female', icon: '👩' };
+  }
+  return { gender: 'Unknown', icon: '🔊' };
+};
 
 export default function DictationPage( 
   props: {
@@ -109,7 +194,52 @@ export default function DictationPage(
     return cleanup;
   }, []);
 
+  // Add voice gender preference state
+  const [preferredGender, setPreferredGender] = useState<VoiceGenderOption>(() => 
+    getStorageValue(STORAGE_KEYS.VOICE_GENDER, VOICE_GENDER_OPTIONS.ALL)
+  );
+
+  // Add storage listener for voice gender preference
+  useEffect(() => {
+    const cleanup = addStorageListener<VoiceGenderOption>(
+      STORAGE_KEYS.VOICE_GENDER, 
+      (newValue) => {
+        setPreferredGender(newValue);
+      }
+    );
+    
+    return cleanup;
+  }, []);
+
+  // Helper function to filter voices by gender
+  const filterVoicesByGender = (voices: SpeechSynthesisVoice[]) => {
+    if (preferredGender === VOICE_GENDER_OPTIONS.ALL) {
+      return voices;
+    }
+
+    return voices.filter(voice => {
+      const recommendation = RECOMMENDED_VOICES.find(rec => 
+        voice.name.includes(rec.name)
+      );
+      
+      if (recommendation) {
+        return preferredGender === VOICE_GENDER_OPTIONS.MALE ? 
+          recommendation.gender === 'Male' : 
+          recommendation.gender === 'Female';
+      }
+
+      // For non-recommended voices, use the helper function
+      const { gender } = getVoiceGender(voice);
+      return preferredGender === VOICE_GENDER_OPTIONS.MALE ? 
+        gender === 'Male' : 
+        gender === 'Female';
+    });
+  };
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Add new state for selected voice
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
 
   useEffect(() => {
     // Get words from selected word bank's units and shuffle them
@@ -122,14 +252,30 @@ export default function DictationPage(
     setWords(shuffledWords);
     setUserAnswers(new Array(shuffledWords.length).fill(PLACEHOLDER));
     
-    // Play the first word after words are loaded
-    if (shuffledWords.length > 0) {
-      setTimeout(() => {
-        playCurrentWord(shuffledWords, 0);
-      }, INITIAL_WORD_DELAY);
-    }
+    // Select a random voice once
+    const voices = window.speechSynthesis.getVoices();
+    const recommendedVoiceNames = RECOMMENDED_VOICES
+      .filter(rec => preferredGender === VOICE_GENDER_OPTIONS.ALL || 
+        (preferredGender === VOICE_GENDER_OPTIONS.MALE ? rec.gender === 'Male' : rec.gender === 'Female'))
+      .map(rec => rec.name);
+      
+    const availableRecommendedVoices = voices.filter(voice => 
+      recommendedVoiceNames.some(name => voice.name.includes(name))
+    );
+    
+    if (availableRecommendedVoices.length > 0) {
+      const randomIndex = Math.floor(Math.random() * availableRecommendedVoices.length);
+      setSelectedVoice(availableRecommendedVoices[randomIndex]);
+    }    
+  }, [props.searchParams, preferredGender]);
 
-  }, [props.searchParams]);
+  useEffect(() => {
+     // Play the first word after words are loaded and voice is selected
+    if (words.length > 0) {
+      setTimeout(() => {
+        playCurrentWord(words, 0);
+      }, INITIAL_WORD_DELAY);
+    }  }, [words, selectedVoice]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -185,6 +331,10 @@ export default function DictationPage(
 
     const createUtterance = (text: string) => {
       const utterance = new SpeechSynthesisUtterance(text);
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
       
       utterance.lang = 'en-US';
       utterance.rate = speechRate;
@@ -282,38 +432,46 @@ export default function DictationPage(
           <Typography color="text.primary">Dictation Practice</Typography>
         </Breadcrumbs>
 
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {showHints && words[currentWordIndex] && words[currentWordIndex].definition && (
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                mb: 2, 
-                p: 2, 
-                bgcolor: 'grey.100', 
-                borderRadius: 1,
-                fontStyle: 'italic',
-                width: '100%'
-              }}
-            >
-              Hint(提示): {words[currentWordIndex].definition}
-            </Typography>
-          )}
-        </Box>
+        <Alert 
+          severity="info" 
+          variant="outlined" 
+          sx={{ mb: 2 }}
+        >
+          <AlertTitle>Type the word you hear... (Press Enter to submit)</AlertTitle>
+          输入你听到的单词...（按回车键提交）
+        </Alert>
 
-        <TextField
-          fullWidth
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          onKeyDown={handleSubmit}
-          placeholder="Type the word you hear... (Press Enter to submit)"
-          autoFocus
-        />
-        {/* Add display for all answers */}
-        <Box sx={{ width: '100%', mt: 2, mb: 2 }}>
-          <LinearProgressWithLabel 
-            value={(userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+        <Paper variant="outlined" sx={{ p: 3, mb: 2 }}>
+          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {showHints && words[currentWordIndex] && words[currentWordIndex].definition && (
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  mb: 2, 
+                  p: 2, 
+                  bgcolor: 'grey.100', 
+                  borderRadius: 1,
+                  fontStyle: 'italic',
+                  width: '100%'
+                }}
+              >
+                Hint(提示): {words[currentWordIndex].definition}
+              </Typography>
+            )}
+          </Box>
+
+          <TextField
+            fullWidth
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={handleSubmit}
+            placeholder="Type the word you hear... (Press Enter to submit) | 输入你听到的单词...（按回车键提交）"
+            autoFocus
           />
-        </Box>
+            <LinearProgressWithLabel 
+              value={(userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
+            />
+        </Paper>
 
         {/* Replace the Typography components for time with these Gauges */}
         <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 2 }}>
