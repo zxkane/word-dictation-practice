@@ -200,7 +200,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           open={settingsOpen}
           onClose={toggleSettings}
         >
-          <Box sx={{ width: 468, p: 3 }}>
+          <Box sx={{ 
+            width: { xs: '100%', sm: 468 }, 
+            p: 3 
+          }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 2, borderBottom: 1, borderColor: 'divider' }}>
               <Typography variant="body1">
                 Settings
