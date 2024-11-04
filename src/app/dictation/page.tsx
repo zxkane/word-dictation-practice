@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses, Alert, AlertTitle, Paper, FormControl, InputLabel, Select, ListSubheader, MenuItem, Chip, Button } from "@mui/material";
+import { TextField, Typography, Box, Breadcrumbs, Link, LinearProgress, styled, linearProgressClasses, Alert, AlertTitle, Paper, Button } from "@mui/material";
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -107,27 +107,6 @@ const RECOMMENDED_VOICES = [
     icon: '👩'
   }
 ] as const;
-
-// Update helper function
-const getVoiceGender = (voice: SpeechSynthesisVoice) => {
-  // Find matching recommended voice first
-  const recommendedVoice = RECOMMENDED_VOICES.find(rec => 
-    voice.name.includes(rec.name)
-  );
-  
-  if (recommendedVoice) {
-    return { gender: recommendedVoice.gender, icon: recommendedVoice.icon };
-  }
-
-  // Fallback to existing logic for non-recommended voices
-  if (voice.name.toLowerCase().includes('male')) {
-    return { gender: 'Male', icon: '👨' };
-  }
-  if (voice.name.toLowerCase().includes('female')) {
-    return { gender: 'Female', icon: '👩' };
-  }
-  return { gender: 'Unknown', icon: '🔊' };
-};
 
 // Add the SoftKeyboard component
 function SoftKeyboard(props: { 
@@ -249,31 +228,6 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     
     return cleanup;
   }, []);
-
-  // Helper function to filter voices by gender
-  const filterVoicesByGender = (voices: SpeechSynthesisVoice[]) => {
-    if (preferredGender === VOICE_GENDER_OPTIONS.ALL) {
-      return voices;
-    }
-
-    return voices.filter(voice => {
-      const recommendation = RECOMMENDED_VOICES.find(rec => 
-        voice.name.includes(rec.name)
-      );
-      
-      if (recommendation) {
-        return preferredGender === VOICE_GENDER_OPTIONS.MALE ? 
-          recommendation.gender === 'Male' : 
-          recommendation.gender === 'Female';
-      }
-
-      // For non-recommended voices, use the helper function
-      const { gender } = getVoiceGender(voice);
-      return preferredGender === VOICE_GENDER_OPTIONS.MALE ? 
-        gender === 'Male' : 
-        gender === 'Female';
-    });
-  };
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
