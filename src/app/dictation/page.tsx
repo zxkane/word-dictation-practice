@@ -20,10 +20,10 @@ import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word, WordBank } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Home } from '@mui/icons-material';
-import { Gauge } from '@mui/x-charts';
 import { DEFAULT_PLAY_SPEED, STORAGE_KEYS, VOICE_GENDER_OPTIONS, type VoiceGenderOption } from "@/types/configuration";
 import { getStorageValue, addStorageListener } from "@/utils/storage";
 import { styled } from "@mui/material";
+import { StatCard } from "@/components/StatisticsPanel";
 
 const PLACEHOLDER = "N/A"; // Define placeholder as a constant
 
@@ -444,7 +444,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
 
       setUserAnswers(prev => {
         const newAnswers = [...prev];
-        newAnswers[currentWordIndex] = userInput;
+        newAnswers[currentWordIndex] = userInput.trim();
         return newAnswers;
       });
 
@@ -468,8 +468,12 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
 
   // Add this function to format time
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
@@ -505,7 +509,12 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     };
   }, []);
 
+  // Add new state for tracking total keystrokes
+  const [totalKeystrokes, setTotalKeystrokes] = useState(0);
+
+  // Update the handleSoftKeyPress function
   const handleSoftKeyPress = (key: string) => {
+    setTotalKeystrokes(prev => prev + 1);
     if (key === "BACKSPACE") {
       setUserInput(prev => prev.slice(0, -1));
     } else {
@@ -556,6 +565,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       ) : (
         <Box sx={{ 
           width: '100%',
+          maxWidth: '1200px', // Add maximum width
           mx: 'auto',
           px: { xs: 0.5, sm: 1 },
           boxSizing: 'border-box',
@@ -674,6 +684,38 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                 输入你听到的单词...（按回车键提交）
               </Alert>
 
+              <Box sx={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: { 
+                      xs: '1fr',
+                      sm: '1fr 1fr',
+                      md: 'repeat(4, 1fr)'
+                    },
+                    gap: 2,
+                    mb: 3
+                  }}>
+                    <StatCard 
+                      value={elapsedTime > 0 ? Math.round((totalKeystrokes / 5) / (elapsedTime / 60)) : 0} 
+                      label="Characters Per Minute"
+                      sublabel="每分钟字符数"
+                    />
+                    <StatCard 
+                      value={totalKeystrokes} 
+                      label="Total Characters"
+                      sublabel="总字符数"
+                    />
+                    <StatCard 
+                      value={formatTime(elapsedTime)} 
+                      label="Total Practice Time"
+                      sublabel="总练习时间"
+                    />
+                    <StatCard 
+                      value={currentWordElapsedTime >= 30 ? 0 : 30 - currentWordElapsedTime} 
+                      label="Current Word Left Time(s)"
+                      sublabel="当前单词剩余时间(秒)"
+                    />
+                  </Box>
+
               <Paper variant="outlined" sx={{ p: 3, mb: 2 }}>
                 <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   {showHints && words[currentWordIndex] && words[currentWordIndex].definition && (
@@ -696,7 +738,10 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                 <TextField
                   fullWidth
                   value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
+                  onChange={(e) => {
+                    setUserInput(e.target.value);
+                    setTotalKeystrokes(prev => prev + 1);
+                  }}
                   onKeyDown={handleSubmit}
                   placeholder="Type the word you hear... (Press Enter to submit) | 输入你听到的单词...（按回车键提交）"
                   autoFocus
@@ -716,43 +761,6 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                   />
                 )}
               </Paper>
-
-              {/* Update the Gauges container for better mobile display */}
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: { xs: 'column', sm: 'row' }, // Stack vertically on mobile
-                alignItems: 'center',
-                justifyContent: 'space-around', 
-                mb: 2,
-                gap: 2 // Add gap between stacked items
-              }}>
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="subtitle2">Total Time</Typography>
-                  <Gauge
-                    value={elapsedTime % 60}
-                    valueMax={words.length * 30}
-                    text={formatTime(elapsedTime)}
-                    sx={{ 
-                      width: { xs: 120, sm: 150 }, // Smaller on mobile
-                      height: { xs: 120, sm: 150 }
-                    }}
-                  />
-                </Box>
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="subtitle2">Current Word Time</Typography>
-                  <Gauge
-                    value={currentWordElapsedTime % 60}
-                    valueMax={30}
-                    text={formatTime(currentWordElapsedTime)}
-                    sx={{ 
-                      width: { xs: 120, sm: 150 }, // Smaller on mobile
-                      height: { xs: 120, sm: 150 }
-                    }}
-                    startAngle={-90} 
-                    endAngle={90}
-                  />
-                </Box>
-              </Box>
             </>
           )}
         </Box>
