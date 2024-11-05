@@ -416,6 +416,8 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
         
       // Navigate to results page with data
       const results = {
+        wordBankName: wordBank?.name,
+        units: wordBank?.units.filter(unit => units.split(",").includes(unit.id)).map(unit => unit.name).join(", "),
         answers: userAnswers,
         words: words,
         elapsedTime,
@@ -695,7 +697,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                     mb: 3
                   }}>
                     <StatCard 
-                      value={elapsedTime > 0 ? Math.round((totalKeystrokes / 5) / (elapsedTime / 60)) : 0} 
+                      value={elapsedTime > 0 ? Math.round((totalKeystrokes / elapsedTime) * 60) : 0} 
                       label="Characters Per Minute"
                       sublabel="每分钟字符数"
                     />

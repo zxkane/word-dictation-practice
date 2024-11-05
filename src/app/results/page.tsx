@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Typography, Paper, Button, Box, CircularProgress } from "@mui/material";
+import { Typography, Paper, Button, Box, CircularProgress, Breadcrumbs, Link } from "@mui/material";
+import { Home } from '@mui/icons-material';
 import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { BarChart, PieChart } from "@mui/x-charts";
 
 interface DictationResults {
+  wordBankName: string;
+  units: string;
   answers: string[];
   words: Word[];
   elapsedTime: number;
@@ -50,6 +53,7 @@ export default function ResultsPage() {
   
   const correctRate = (correctAnswers.length / results.words.length) * 100;
   const typingSpeed = Math.round((results.totalChars / results.elapsedTime) * 60);
+  const wordsPerMinute = Math.round((results.words.length / results.elapsedTime) * 60);
 
   const correctCount = correctAnswers.length;
   const incorrectCount = results.words.length - correctCount;
@@ -59,18 +63,29 @@ export default function ResultsPage() {
     { id: 1, value: incorrectCount, label: 'Incorrect', color: '#f44336' }
   ];
 
-  const barData = [
-    { value: typingSpeed, label: 'Typing Speed' },
-    { value: correctRate, label: 'Accuracy %' }
-  ];
-
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'No.', width: 70 },
-    { field: 'word', headerName: 'Word', flex: 1 },
-    { field: 'answer', headerName: 'Your Answer', flex: 1 },
+    { 
+      field: 'id', 
+      headerName: 'No.',
+      description: '序号', 
+      width: 70 
+    },
+    { 
+      field: 'word', 
+      headerName: 'Word',
+      description: '单词', 
+      flex: 1 
+    },
+    { 
+      field: 'answer', 
+      headerName: 'Your Answer',
+      description: '你的答案', 
+      flex: 1 
+    },
     { 
       field: 'status', 
-      headerName: 'Status', 
+      headerName: 'Result',
+      description: '结果',
       width: 100,
       renderCell: (params) => (
         <Box sx={{ color: params.value ? 'success.main' : 'error.main' }}>
@@ -89,21 +104,59 @@ export default function ResultsPage() {
 
   return (
     <DashboardLayout>
-      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
-        <Typography variant="h4" gutterBottom>
-          Practice Results
-        </Typography>
-        <Typography variant="h5" color="text.secondary" gutterBottom>
-          练习结果
-        </Typography>
+      <Box sx={{ 
+        width: '100%',
+        maxWidth: '1600px', // Add maximum width
+        mx: 'auto',
+        px: { xs: 0.5, sm: 1 },
+        boxSizing: 'border-box',
+        overflowX: 'hidden'
+        }}>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
+          <Link
+            underline="hover"
+            sx={{ display: 'flex', alignItems: 'center' }}
+            color="inherit"
+            href="/"
+          >
+            <Home sx={{ mr: 0.5 }} fontSize="inherit" />
+            Home
+          </Link>
+          <Typography color="text.primary">
+            Practice
+          </Typography>
+          <Typography color="text.secondary">
+            {results.wordBankName}
+          </Typography>
+          <Typography color="text.secondary">
+            {results.units}
+          </Typography>
+          <Typography color="text.primary">
+            Results
+          </Typography>
+        </Breadcrumbs>
 
-        <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-          <Paper sx={{ p: 3, flex: 1 }}>
+        <Box sx={{ 
+          display: 'flex', 
+          flexWrap: 'wrap',
+          gap: 2, 
+          mb: 3,
+          width: '100%',
+        }}>
+          <Paper sx={{ 
+            p: 3,
+            width: {
+              xs: '100%',              // Full width on mobile
+              sm: 'calc(50% - 8px)',   // 2 per row (subtract half of gap)
+              lg: 'calc(25% - 12px)',  // 4 per row (subtract 3/4 of gap)
+            },
+            flexGrow: 1,
+          }}>
             <Typography variant="h6" gutterBottom>
-              Accuracy
+              Dictation Accuracy
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-              准确率
+              听写准确率
             </Typography>
             <PieChart
               series={[
@@ -122,29 +175,107 @@ export default function ResultsPage() {
             </Typography>
           </Paper>
 
-          <Paper sx={{ p: 3, flex: 1 }}>
+          <Paper sx={{ 
+            p: 3,
+            width: {
+              xs: '100%',              // Full width on mobile
+              sm: 'calc(50% - 8px)',   // 2 per row (subtract half of gap)
+              lg: 'calc(25% - 12px)',  // 4 per row (subtract 3/4 of gap)
+            },
+            flexGrow: 1,
+          }}>
             <Typography variant="h6" gutterBottom>
-              Performance
+              Error Count
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-              表现
+              错误数量
+            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              height: 200 
+            }}>
+              <Typography variant="h2" color="error.main">
+                {incorrectCount}
+              </Typography>
+            </Box>
+            <Typography align="center">
+              {correctCount} correct, {incorrectCount} incorrect
+            </Typography>
+          </Paper>
+
+          <Paper sx={{ 
+            p: 3,
+            width: {
+              xs: '100%',              // Full width on mobile
+              sm: 'calc(50% - 8px)',   // 2 per row (subtract half of gap)
+              lg: 'calc(25% - 12px)',  // 4 per row (subtract 3/4 of gap)
+            },
+            flexGrow: 1,
+          }}>
+            <Typography variant="h6" gutterBottom>
+              Characters Per Minute
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+              每分钟字符数
             </Typography>
             <BarChart
               series={[
                 {
-                  data: barData.map(item => item.value),
+                  data: [typingSpeed],
+                  color: '#2196f3'
                 },
               ]}
               xAxis={[
                 {
-                  data: barData.map(item => item.label),
+                  data: ['CPM'],
                   scaleType: 'band',
                 },
               ]}
               height={200}
+              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+              yAxis={[{ min: 0 }]}
             />
             <Typography align="center">
-              {typingSpeed} chars/min
+              {typingSpeed} CPM
+            </Typography>
+          </Paper>
+
+          <Paper sx={{ 
+            p: 3,
+            width: {
+              xs: '100%',              // Full width on mobile
+              sm: 'calc(50% - 8px)',   // 2 per row (subtract half of gap)
+              lg: 'calc(25% - 12px)',  // 4 per row (subtract 3/4 of gap)
+            },
+            flexGrow: 1,
+          }}>
+            <Typography variant="h6" gutterBottom>
+              Words Per Minute
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+              每分钟单词数
+            </Typography>
+            <BarChart
+              series={[
+                {
+                  data: [wordsPerMinute],
+                  color: '#9c27b0'
+                },
+              ]}
+              xAxis={[
+                {
+                  data: ['WPM'],
+                  scaleType: 'band',
+                },
+              ]}
+              height={200}
+              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+              yAxis={[{ min: 0 }]}
+            />
+            <Typography align="center">
+              {wordsPerMinute} WPM
             </Typography>
           </Paper>
         </Box>
