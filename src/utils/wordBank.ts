@@ -18,3 +18,7 @@ const wordBankPaths: { [key: string]: string } = {
 export const exampleWordBank: WordBank = getWordBank(getWordBankPath('example-1'));
 
 export const grade3FirstSemester: WordBank = getWordBank(getWordBankPath('pep-3-1'));
+
+export const allWordBanks: WordBank[] = [
+  grade3FirstSemester
+];

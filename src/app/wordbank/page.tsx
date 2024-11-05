@@ -3,14 +3,23 @@
 import { useState } from "react";
 import { Typography, List, ListItem, ListItemText, Checkbox, Button, Box, Breadcrumbs, Link, Paper } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import { grade3FirstSemester } from "@/utils/wordBank";
+import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useRouter } from 'next/navigation';
+import { WordBank } from "@/types/wordBank";
 
-export default function WordBankPage() {
+// Add search params type
+type SearchParams = {
+  wordBankId: string;
+}
+
+// Update component to accept search params
+export default function WordBankPage({ searchParams }: { searchParams: SearchParams }) {
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
-
   const router = useRouter();
+
+  // Get wordbank from ID instead of using hardcoded one
+  const wordBank: WordBank = getWordBank(getWordBankPath(searchParams.wordBankId));
 
   const handleUnitToggle = (unitName: string) => {
     setSelectedUnits(prev => 
@@ -23,7 +32,7 @@ export default function WordBankPage() {
   const startDictationPractice = () => {
     const queryParams = new URLSearchParams({
       units: selectedUnits.join(','),
-      wordBankId: grade3FirstSemester.id
+      wordBankId: searchParams.wordBankId
     });
     router.push(`/dictation?${queryParams.toString()}`);
   };
@@ -45,12 +54,12 @@ export default function WordBankPage() {
             Practice
           </Typography>
           <Typography color="text.primary">
-            {grade3FirstSemester.name}
+            {wordBank.name}
           </Typography>
         </Breadcrumbs>
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <List sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
-            {grade3FirstSemester.units.map((unit) => (
+            {wordBank.units.map((unit) => (
               <ListItem key={unit.id}>
                 <Checkbox 
                   checked={selectedUnits.includes(unit.id)}

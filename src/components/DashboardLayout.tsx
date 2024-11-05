@@ -25,7 +25,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
-import { grade3FirstSemester } from "@/utils/wordBank";
+import { allWordBanks } from "@/utils/wordBank";
 import { Female, Lightbulb, Male } from '@mui/icons-material';
 import { 
   PlaySpeedOption, 
@@ -146,18 +146,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <Collapse in={practiceOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton 
-              href="/wordbank"
-              sx={{ pl: 4 }}
-            >
-              <ListItemIcon>
-                <MenuBookIcon />
-              </ListItemIcon>
-              <ListItemText 
-                primary={grade3FirstSemester.name}
-                primaryTypographyProps={{ fontSize: '0.9rem' }}
-              />
-            </ListItemButton>
+            {allWordBanks.map((wordBank) => (
+              <ListItemButton 
+                key={wordBank.name}
+                href={`/wordbank?wordBankId=${wordBank.id}`}
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <MenuBookIcon />
+                </ListItemIcon>
+                <ListItemText 
+                  primary={wordBank.name}
+                  primaryTypographyProps={{ fontSize: '0.9rem' }}
+                />
+              </ListItemButton>
+            ))}
           </List>
         </Collapse>
       </List>
