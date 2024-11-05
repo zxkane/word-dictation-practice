@@ -17,7 +17,7 @@ import Container from '@mui/material/Container';
 import Pagination from '@mui/material/Pagination';
 import Grid from '@mui/material/Grid2';
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
-import { Word } from "@/types/wordBank";
+import { Word, WordBank } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Home } from '@mui/icons-material';
 import { Gauge } from '@mui/x-charts';
@@ -167,7 +167,7 @@ function SoftKeyboard(props: {
                 ...(key === "SPACE" || key === "BACKSPACE" ? {
                   minWidth: { xs: '60px', sm: '80px', lg: '120px' } // Even wider special keys on large screens
                 } : {}),
-                m: { xs: 0.25, sm: 0.5, lg: 0.75 } // More margin between keys on large screens
+                m: { xs: 0.25, sm: 0.5 } // More margin between keys on large screens
               }}
             >
               {key === "SPACE"
@@ -271,6 +271,9 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
   // Move this declaration up with other state declarations
   const [isReadyToPractice, setIsReadyToPractice] = useState(false);
 
+  // Update wordBank state with WordBank type
+  const [wordBank, setWordBank] = useState<WordBank | null>(null);
+
   // Wrap isDataReady in useCallback
   const isDataReady = useCallback(() => {
     return words.length > 0 && 
@@ -287,6 +290,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     // Get words from selected word bank's units and shuffle them
     const selectedUnits = units.split(",");
     const wordBank = getWordBank(getWordBankPath(wordBankId));
+    setWordBank(wordBank);
     const allWords = wordBank.units
         .filter((unit: { id: string }) => selectedUnits.includes(unit.id))
         .flatMap((unit: { words: Word[] }) => unit.words);
@@ -568,6 +572,18 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
               Home
             </Link>
             <Typography color="text.primary">
+              Practice
+            </Typography>
+            <Typography color="text.primary">
+              {wordBank?.name}
+            </Typography>
+            <Typography color="text.primary">
+              {wordBank?.units
+                .filter(unit => units.split(",").includes(unit.id))
+                .map(unit => unit.name)
+                .join(", ")}
+            </Typography>
+            <Typography color="text.primary">
               {showReview ? "Word Review" : "Dictation Practice"}
             </Typography>
           </Breadcrumbs>
@@ -575,31 +591,6 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
           {showReview ? (
             // Review Section Content
             <Container maxWidth="lg">
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                mb: 3 
-              }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => {
-                    setShowReview(false);
-                    setIsReadyToPractice(true);
-                  }}
-                  sx={{ minWidth: 200 }}
-                >
-                  Ready to Practice
-                  <Typography 
-                    variant="caption" 
-                    display="block" 
-                    sx={{ opacity: 0.8 }}
-                  >
-                    开始练习
-                  </Typography>
-                </Button>
-              </Box>
-
               <Grid container spacing={2} sx={{ mb: 4 }}>
                 {currentPageWords.map((word, index) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
@@ -639,6 +630,37 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                   />
                 </Box>
               )}
+
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                mb: 3,
+                position: 'sticky',
+                bottom: 16,
+                zIndex: 1
+              }}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => {
+                    setShowReview(false);
+                    setIsReadyToPractice(true);
+                  }}
+                  sx={{ 
+                    minWidth: 200,
+                    boxShadow: 3 // Added shadow for better visibility
+                  }}
+                >
+                  Ready to Practice
+                  <Typography 
+                    variant="caption" 
+                    display="block" 
+                    sx={{ opacity: 0.8 }}
+                  >
+                    开始练习
+                  </Typography>
+                </Button>
+              </Box>
             </Container>
           ) : (
             // Practice Section Content

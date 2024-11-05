@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Typography, List, ListItem, ListItemText, Checkbox, Button, Box, Breadcrumbs, Link } from "@mui/material";
+import { Typography, List, ListItem, ListItemText, Checkbox, Button, Box, Breadcrumbs, Link, Paper } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import { grade3FirstSemester } from "@/utils/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -48,31 +48,35 @@ export default function WordBankPage() {
             {grade3FirstSemester.name}
           </Typography>
         </Breadcrumbs>
+        <Paper sx={{ p: 3, borderRadius: 2 }}>
+          <List sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
+            {grade3FirstSemester.units.map((unit) => (
+              <ListItem key={unit.id}>
+                <Checkbox 
+                  checked={selectedUnits.includes(unit.id)}
+                  onChange={() => handleUnitToggle(unit.id)}
+                />
+                <ListItemText 
+                  primary={`${unit.name} - ${unit.description}`}
+                  secondary={`${unit.words.length} words`}
+                />
+              </ListItem>
+            ))}
+          </List>
 
-        <List sx={{ bgcolor: 'background.paper', borderRadius: 1 }}>
-          {grade3FirstSemester.units.map((unit) => (
-            <ListItem key={unit.id}>
-              <Checkbox 
-                checked={selectedUnits.includes(unit.id)}
-                onChange={() => handleUnitToggle(unit.id)}
-              />
-              <ListItemText 
-                primary={`${unit.name} - ${unit.description}`}
-                secondary={`${unit.words.length} words`}
-              />
-            </ListItem>
-          ))}
-        </List>
-
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
-          <Button
-            variant="contained"
-            onClick={startDictationPractice}
-            disabled={selectedUnits.length === 0}
-          >
-            Start Practice
-          </Button>
-        </Box>
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Button
+              variant="contained"
+              onClick={startDictationPractice}
+              disabled={selectedUnits.length === 0}
+            >
+              Start Practice
+              <Typography variant="caption" display="block" sx={{ fontSize: '0.7em' }}>
+                开始练习
+              </Typography>
+            </Button>
+          </Box>
+        </Paper>
       </Box>
     </DashboardLayout>
   );
