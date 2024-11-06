@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "cloudflare:build:worker": "cloudflare",
+    "cloudflare:dev:worker": "wrangler dev --port 8771",
+    "cloudflare:preview:worker": "npm run cloudflare:build:worker && npm run cloudflare:dev:worker",
+    "cloudflare:deploy:worker": "npm run cloudflare:build:worker && wrangler deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -22,6 +26,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^0.2.1",
     "@types/node": "^22.7.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -31,6 +36,7 @@
     "lint-staged": "^15.2.10",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^3.84.1"
   }
 }
