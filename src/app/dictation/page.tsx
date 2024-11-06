@@ -411,9 +411,6 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
         clearInterval(intervalRef.current);
       }
 
-      // Calculate total characters typed
-      const totalChars = userAnswers.reduce((sum, answer) => sum + answer.length, 0);
-        
       // Navigate to results page with data
       const results = {
         wordBankName: wordBank?.name,
@@ -421,7 +418,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
         answers: userAnswers,
         words: words,
         elapsedTime,
-        totalChars,
+        totalChars: totalKeystrokes,
       };
               
       // Store results in sessionStorage to handle large datasets
@@ -520,11 +517,11 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
 
   // Update the handleSoftKeyPress function
   const handleSoftKeyPress = (key: string) => {
-    setTotalKeystrokes(prev => prev + 1);
     if (key === "BACKSPACE") {
       setUserInput(prev => prev.slice(0, -1));
     } else {
       setUserInput(prev => prev + key);
+      setTotalKeystrokes(prev => prev + 1);
     }
   };
 
