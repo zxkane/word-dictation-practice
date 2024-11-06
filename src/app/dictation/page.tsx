@@ -479,8 +479,12 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  // Add state to control the display of the soft keyboard
-  const [showSoftKeyboard, setShowSoftKeyboard] = useState(true);
+  // Add a utility function to detect if device has physical keyboard
+  const hasPhysicalKeyboard = () => {
+    // Most touch-only devices have more than 1 touch point
+    // Traditional computers with physical keyboard usually have 0 or 1
+    return navigator.maxTouchPoints <= 1;
+  };
 
   // Add new state to track the currently pressed key
   const [pressedKey, setPressedKey] = useState<string | null>(null);
@@ -747,7 +751,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                   onKeyDown={handleSubmit}
                   placeholder="Type the word you hear... (Press Enter to submit) | 输入你听到的单词...（按回车键提交）"
                   autoFocus
-                  onFocus={() => setShowSoftKeyboard(true)}
+                  // Remove the onFocus handler since we don't want to show keyboard on mobile
                   autoComplete="off"
                 />
 
@@ -755,8 +759,8 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                   value={(words.length == 0 ? 0 : userAnswers.filter(answer => answer !== PLACEHOLDER).length / words.length) * 100} 
                 />
 
-                {/* Display the soft keyboard */}
-                {showSoftKeyboard && (
+                {/* Only show soft keyboard on larger screens */}
+                {hasPhysicalKeyboard() && (
                   <SoftKeyboard
                     onKeyPress={handleSoftKeyPress}
                     pressedKey={pressedKey}
