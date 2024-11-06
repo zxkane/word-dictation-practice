@@ -693,7 +693,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
               <Box sx={{ 
                     display: 'grid', 
                     gridTemplateColumns: { 
-                      xs: '1fr',
+                      xs: '1fr 1fr',
                       sm: '1fr 1fr',
                       md: 'repeat(4, 1fr)'
                     },

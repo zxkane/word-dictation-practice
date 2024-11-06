@@ -185,10 +185,10 @@ export default function ResultsPage() {
             flexGrow: 1,
           }}>
             <Typography variant="h6" gutterBottom>
-              Error Count
+              Spell Error Count
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-              错误数量
+              拼写错误数
             </Typography>
             <Box sx={{ 
               display: 'flex', 
