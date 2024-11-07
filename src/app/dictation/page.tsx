@@ -19,7 +19,7 @@ import Grid from '@mui/material/Grid2';
 import { getWordBank, getWordBankPath } from "@/utils/wordBank";
 import { Word, WordBank } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Home } from '@mui/icons-material';
+import { Home, VolumeUp } from '@mui/icons-material';
 import { DEFAULT_PLAY_SPEED, STORAGE_KEYS, VOICE_GENDER_OPTIONS, type VoiceGenderOption } from "@/types/configuration";
 import { getStorageValue, addStorageListener } from "@/utils/storage";
 import { styled } from "@mui/material";
@@ -335,26 +335,63 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     setSpeaking(false);
   }, [audioQueue]);
 
-  // Now playCurrentWord can use clearAudioQueue
+  const createUtterance = (text: string, voice: SpeechSynthesisVoice | null, rate: number) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (voice) {
+      utterance.voice = voice;
+    }
+    utterance.lang = 'en-US';
+    utterance.rate = rate;
+    utterance.volume = 1.0;
+    return utterance;
+  };
+
+  const retrySpeak = (utterance: SpeechSynthesisUtterance, maxRetries = 3) => {
+    let attempts = 0;
+    
+    const trySpeak = () => {
+      if (attempts >= maxRetries) {
+        console.error('Max retry attempts reached for speech synthesis');
+        return;
+      }
+      
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(utterance);
+        attempts++;
+      } catch (error) {
+        console.error('Speech synthesis attempt failed:', error);
+        setTimeout(trySpeak, 1000); // Retry after 1 second
+      }
+    };
+    
+    trySpeak();
+  };
+
+  const pronounceWord = (utterance: SpeechSynthesisUtterance) => {
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    // Ensure voices are loaded before speaking
+    if (window.speechSynthesis.getVoices().length === 0) {
+      // If voices aren't loaded, wait for them
+      window.speechSynthesis.addEventListener('voiceschanged', () => {
+        retrySpeak(utterance);
+      }, { once: true });
+    } else {
+      // Resume synthesis in case it's paused
+      window.speechSynthesis.resume();
+      retrySpeak(utterance);
+    }
+  };
+
   const playCurrentWord = useCallback((words: Word[], index: number) => {
     if (speaking) return;
     
     clearAudioQueue();
 
-    const createUtterance = (text: string) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      
-      utterance.lang = 'en-US';
-      utterance.rate = speechRate;
-      utterance.volume = 1.0;
-      return utterance;
-    };
-
-    const utterance = createUtterance(words[index].term);
+    const utterance = createUtterance(words[index].term, selectedVoice, speechRate);
     
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => {
@@ -364,8 +401,12 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       const queueNextUtterance = () => {
         if (playCount < playTimes) {
           const timeoutId = setTimeout(() => {
-            const nextUtterance = createUtterance(words[index].term);
-            window.speechSynthesis.speak(nextUtterance);
+            const nextUtterance = createUtterance(words[index].term, selectedVoice, speechRate);
+            nextUtterance.onstart = () => setSpeaking(true);
+            nextUtterance.onend = () => {
+              setSpeaking(false);
+            };
+            pronounceWord(nextUtterance);
             playCount++;
             if (playCount < playTimes) {
               queueNextUtterance();
@@ -378,7 +419,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       
       queueNextUtterance();
     };
-    window.speechSynthesis.speak(utterance);
+    pronounceWord(utterance);
   }, [speaking, selectedVoice, speechRate, playTimes, clearAudioQueue]);
 
   useEffect(() => {
@@ -609,9 +650,23 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
-                        <Typography variant="h5" component="div" gutterBottom>
-                          {word.term}
-                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                          <Typography variant="h5" component="div">
+                            {word.term}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => {
+                              const utterance = createUtterance(word.term, selectedVoice, speechRate);
+                              pronounceWord(utterance);
+                            }}
+                            startIcon={<VolumeUp />}
+                            sx={{ minWidth: 40, ml: 1 }}
+                          >
+                            Play
+                          </Button>
+                        </Box>
                         {word.definition && (
                           <Typography variant="body1" color="text.secondary" gutterBottom>
                             {word.definition}
