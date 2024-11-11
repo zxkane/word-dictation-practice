@@ -14,7 +14,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { lightGreen, pink } from '@mui/material/colors';
 
-import { initClickstream } from '@/utils/clickstream';
+import { initClickstream, initGoogleAnalytics } from '@/utils/clickstream';
 import { useEffect } from 'react';
 
 const theme = createTheme({
@@ -51,6 +51,7 @@ const geistMono = localFont({
 function ClickstreamInit() {
   useEffect(() => {
     initClickstream();
+    initGoogleAnalytics();
   }, []);
   
   return null;
