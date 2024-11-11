@@ -17,6 +17,8 @@ import { lightGreen, pink } from '@mui/material/colors';
 import { initClickstream, initGoogleAnalytics } from '@/utils/clickstream';
 import { useEffect } from 'react';
 
+import { Analytics } from '@vercel/analytics/react';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -76,6 +78,7 @@ export default function RootLayout({
           <CssBaseline />
           <ClickstreamInit />
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
