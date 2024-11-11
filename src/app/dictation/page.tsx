@@ -594,17 +594,33 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
           left: '50%',
           transform: 'translate(-50%, -50%)'
         }}>
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ width: '80%', maxWidth: 400 }}>
-              <LinearProgress />
-            </Box>
-          </Box>
-          <Typography sx={{ mt: 2 }} variant="body1" color="text.secondary">
-            Loading dictation practice...
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            正在加载听写练习...
-          </Typography>
+          {window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en-')).length === 0 ? (
+            // Browser not supported message
+            <>
+              <Alert severity="error" sx={{ mb: 2 }}>
+                <AlertTitle>Browser Not Supported</AlertTitle>
+                Your browser does not support text-to-speech functionality. Please try using a modern browser like Chrome, Firefox, or Safari.
+              </Alert>
+              <Typography variant="body2" color="text.secondary">
+                您的浏览器不支持文字转语音功能。请使用 Chrome、Firefox 或 Safari 等现代浏览器。
+              </Typography>
+            </>
+          ) : (
+            // Regular loading indicator
+            <>
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ width: '80%', maxWidth: 400 }}>
+                  <LinearProgress />
+                </Box>
+              </Box>
+              <Typography sx={{ mt: 2 }} variant="body1" color="text.secondary">
+                Loading dictation practice...
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                正在加载听写练习...
+              </Typography>
+            </>
+          )}
         </Box>
       ) : (
         <Box sx={{ 
