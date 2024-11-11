@@ -460,6 +460,13 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
         words: words,
         elapsedTime,
         totalChars: totalKeystrokes,
+        preferences: {
+          playSpeed: speechRate,
+          playTimes: playTimes,
+          voiceGender: preferredGender,
+          showHints: showHints,
+          selectedVoice: selectedVoice?.name || 'Unknown'
+        }
       };
               
       // Store results in sessionStorage to handle large datasets

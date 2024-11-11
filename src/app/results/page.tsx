@@ -16,6 +16,13 @@ interface DictationResults {
   words: Word[];
   elapsedTime: number;
   totalChars: number;
+  preferences: {
+    playSpeed: number;
+    playTimes: number;
+    voiceGender: string;
+    showHints: boolean;
+    selectedVoice: string;
+  };
 }
 
 export default function ResultsPage() {
@@ -45,7 +52,12 @@ export default function ResultsPage() {
         accuracy_rate: correctRate,
         typing_speed_cpm: typingSpeed,
         words_per_minute: wordsPerMinute,
-        elapsed_time_seconds: parsedResults.elapsedTime
+        elapsed_time_seconds: parsedResults.elapsedTime,
+        play_speed: parsedResults.preferences.playSpeed,
+        play_times: parsedResults.preferences.playTimes,
+        voice_gender: parsedResults.preferences.voiceGender,
+        show_hints: parsedResults.preferences.showHints,
+        selected_voice: parsedResults.preferences.selectedVoice
       });
     }
   }, []);
