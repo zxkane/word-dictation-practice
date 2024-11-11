@@ -7,6 +7,7 @@ import { Word } from "@/types/wordBank";
 import DashboardLayout from "@/components/DashboardLayout";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { BarChart, PieChart } from "@mui/x-charts";
+import { recordEvent } from "@/utils/clickstream";
 
 interface DictationResults {
   wordBankName: string;
@@ -23,7 +24,29 @@ export default function ResultsPage() {
   useEffect(() => {
     const storedResults = sessionStorage.getItem('dictationResults');
     if (storedResults) {
-      setResults(JSON.parse(storedResults));
+      const parsedResults = JSON.parse(storedResults);
+      setResults(parsedResults);
+      
+      // Calculate metrics once
+      const correctAnswers = parsedResults.answers.filter(
+        (answer: string, index: number) => 
+          answer.toLowerCase() === parsedResults.words[index].term.toLowerCase()
+      );
+      const correctRate = (correctAnswers.length / parsedResults.words.length) * 100;
+      const typingSpeed = Math.round((parsedResults.totalChars / parsedResults.elapsedTime) * 60);
+      const wordsPerMinute = Math.round((parsedResults.words.length / parsedResults.elapsedTime) * 60);
+
+      // Record the dictation results using calculated metrics
+      recordEvent('dictation_completed', {
+        word_bank_name: parsedResults.wordBankName,
+        units: parsedResults.units,
+        total_words: parsedResults.words.length,
+        correct_words: correctAnswers.length,
+        accuracy_rate: correctRate,
+        typing_speed_cpm: typingSpeed,
+        words_per_minute: wordsPerMinute,
+        elapsed_time_seconds: parsedResults.elapsedTime
+      });
     }
   }, []);
 
