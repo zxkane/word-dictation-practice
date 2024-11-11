@@ -14,6 +14,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { lightGreen, pink } from '@mui/material/colors';
 
+import { initClickstream } from '@/utils/clickstream';
+import { useEffect } from 'react';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -45,6 +48,14 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+function ClickstreamInit() {
+  useEffect(() => {
+    initClickstream();
+  }, []);
+  
+  return null;
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -62,6 +73,7 @@ export default function RootLayout({
       >
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <ClickstreamInit />
           {children}
         </ThemeProvider>
       </body>
