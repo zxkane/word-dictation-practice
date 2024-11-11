@@ -18,6 +18,7 @@ import { initClickstream } from '@/utils/clickstream';
 import { useEffect } from 'react';
 
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 
 const theme = createTheme({
@@ -104,6 +105,7 @@ export default function RootLayout({
           <ClickstreamInit />
           {children}
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
