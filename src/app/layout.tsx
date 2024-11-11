@@ -53,9 +53,18 @@ const geistMono = localFont({
 function ClickstreamInit() {
   useEffect(() => {
     initClickstream();
-    initGoogleAnalytics();
   }, []);
   
+  return null;
+}
+
+function GoogleAnalyticsInit() {
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      initGoogleAnalytics();
+    }
+  }, []);
+
   return null;
 }
 
@@ -67,6 +76,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GoogleAnalyticsInit />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-icon?<generated>" />
