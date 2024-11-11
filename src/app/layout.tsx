@@ -14,10 +14,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { lightGreen, pink } from '@mui/material/colors';
 
-import { initClickstream, initGoogleAnalytics } from '@/utils/clickstream';
+import { initClickstream } from '@/utils/clickstream';
 import { useEffect } from 'react';
 
 import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script';
 
 const theme = createTheme({
   palette: {
@@ -59,13 +60,27 @@ function ClickstreamInit() {
 }
 
 function GoogleAnalyticsInit() {
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'production') {
-      initGoogleAnalytics();
-    }
-  }, []);
-
-  return null;
+  return (
+    <>
+      <Script
+        id="ga-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+          `
+        }}
+      />
+      <Script
+        id="ga-tag"
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+      />
+    </>
+  );
 }
 
 export default function RootLayout({
@@ -76,7 +91,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <GoogleAnalyticsInit />
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && <GoogleAnalyticsInit />}
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-icon?<generated>" />
