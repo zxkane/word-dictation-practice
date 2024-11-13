@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography, Box, Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography, Box, Card, CardContent, CardHeader, CardMedia, Link } from "@mui/material";
 import { useContext } from "react";
 import { DrawerContext } from "./DashboardLayout";
 
@@ -8,7 +8,7 @@ export default function InstructionSteps() {
   return (
     <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
     <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-      Welcome to English Dictation Practice
+      Welcome to English Dictation and Typing Practice
     </Typography>
     
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -20,6 +20,9 @@ export default function InstructionSteps() {
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
               家里小朋友在家分享了在学校信息课上练习键盘打字。我们想到了一个有趣的主意 - 为什么不把打字练习变成一个有趣的英语听写游戏呢？这样不仅可以提高打字速度，还能增强英语听和拼写能力。一举多得，让学习变得更有趣！于是这个应用就诞生了。
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              本应用的开发过程中全程得到了编程 AI Copilot 的协助，它帮助我更快速地实现了功能，使得开发过程更加高效。更多细节请参阅<Link href="https://kane.mx/posts/2024/ai-copilot-for-programming/" target="_blank" rel="noopener" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>此博客文章</Link>。
             </Typography>
           </CardContent>
         </Box>
@@ -80,4 +83,4 @@ export default function InstructionSteps() {
     </Box>
   </Box>
   );
-} 
+}

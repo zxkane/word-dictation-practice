@@ -1,6 +1,6 @@
 # Word Dictation Practice
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a web application built with [Next.js][nextjs] and [Material UI][mui], designed for English word dictation practice and helping computer beginners track their keyboard input efficiency. It's almost completed with AI Copilot in [Cursor][cursor] with Claude Sonnet 3.5 v2. See the [blog post][blog-post] for more details.
 
 ## Getting Started
 
@@ -30,3 +30,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deploy on AWS Amplify Hosting
+
+[Amplify Hosting](https://aws.amazon.com/amplify/hosting/) is a service that allows you to deploy your Next.js app in minutes, which provides the quite similar deployment experience to Vercel. See [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/deploy-nextjs-app.html) for getting started.
+
+[nextjs]: https://nextjs.org/
+[mui]: https://mui.com/
+[cursor]: https://www.cursor.com/
+[blog-post]: https://kane.mx/posts/2024/ai-copilot-for-programming/
