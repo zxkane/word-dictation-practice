@@ -193,7 +193,6 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
   const [userAnswers, setUserAnswers] = useState<string[]>(new Array(1).fill(PLACEHOLDER));
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [userInput, setUserInput] = useState("");
-  const [speaking, setSpeaking] = useState(false);
 
   // Update show hints state and add listener
   const [showHints, setShowHints] = useState(() => 
@@ -327,13 +326,22 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     }
   }, [words, showHints, speechRate, playTimes, preferredGender, selectedVoice, isDataReady]);
 
-  // Move clearAudioQueue before playCurrentWord
+  // Update playCurrentWord to use a ref for the speaking state
+  const speakingRef = useRef(false);  // Add this ref
+
+  // Update the setSpeaking function to also update the ref
+  const updateSpeaking = useCallback((value: boolean) => {
+    speakingRef.current = value;
+  }, []);
+
+  // Update clearAudioQueue to use the new updateSpeaking
   const clearAudioQueue = useCallback(() => {
+    console.debug(`Clearing audio queue with ${audioQueue.length} items.`);
+    updateSpeaking(false);
     audioQueue.forEach(timeoutId => clearTimeout(timeoutId));
     setAudioQueue([]);
     window.speechSynthesis.cancel();
-    setSpeaking(false);
-  }, [audioQueue]);
+  }, [audioQueue, updateSpeaking]);
 
   const createUtterance = (text: string, voice: SpeechSynthesisVoice | null, rate: number) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -386,25 +394,29 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     }
   };
 
+  // Update playCurrentWord to use the ref instead of the state
   const playCurrentWord = useCallback((words: Word[], index: number) => {
-    if (speaking) return;
+    if (speakingRef.current) {
+      console.debug('Already speaking, skipping...');
+      return;
+    }
     
     clearAudioQueue();
 
     const utterance = createUtterance(words[index].term, selectedVoice, speechRate);
     
-    utterance.onstart = () => setSpeaking(true);
+    utterance.onstart = () => updateSpeaking(true);
     utterance.onend = () => {
-      setSpeaking(false);
+      updateSpeaking(false);
       
       let playCount = 1;
       const queueNextUtterance = () => {
         if (playCount < playTimes) {
           const timeoutId = setTimeout(() => {
             const nextUtterance = createUtterance(words[index].term, selectedVoice, speechRate);
-            nextUtterance.onstart = () => setSpeaking(true);
+            nextUtterance.onstart = () => updateSpeaking(true);
             nextUtterance.onend = () => {
-              setSpeaking(false);
+              updateSpeaking(false);
             };
             pronounceWord(nextUtterance);
             playCount++;
@@ -420,7 +432,7 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       queueNextUtterance();
     };
     pronounceWord(utterance);
-  }, [speaking, selectedVoice, speechRate, playTimes, clearAudioQueue]);
+  }, [clearAudioQueue, selectedVoice, speechRate, playTimes, pronounceWord, updateSpeaking]);
 
   useEffect(() => {
     // Play the first word after words are loaded and voice is selected
