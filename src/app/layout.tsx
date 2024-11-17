@@ -96,6 +96,10 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-icon?<generated>" />
+        
+        <meta itemProp="name" content="英语听写练习" />
+        <meta itemProp="description" content="一个帮助孩子提高英语听力和拼写能力的有趣工具。通过打字练习来增强英语学习效果！" />
+        <meta itemProp="image" content="/about-all.jpeg" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
