@@ -365,9 +365,12 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       
       try {
         window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
         window.speechSynthesis.speak(utterance);
         attempts++;
+        console.debug(`Spoke word '${utterance.text}'.`);
       } catch (error) {
         console.error('Speech synthesis attempt failed:', error);
         setTimeout(trySpeak, 1000); // Retry after 1 second
@@ -381,8 +384,10 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
     // Cancel any ongoing speech
     window.speechSynthesis.cancel();
     
+    console.debug(`Pronouncing word ${utterance.text}`);
     // Ensure voices are loaded before speaking
     if (window.speechSynthesis.getVoices().length === 0) {
+      console.warn(`Can't get speech voice.`);
       // If voices aren't loaded, wait for them
       window.speechSynthesis.addEventListener('voiceschanged', () => {
         retrySpeak(utterance);
@@ -400,6 +405,8 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
       console.debug('Already speaking, skipping...');
       return;
     }
+
+    console.debug(`Playing the voice of word ${words[index].term}`);
     
     clearAudioQueue();
 
@@ -608,12 +615,15 @@ export default function DictationPage(props: { searchParams: SearchParams }) {
           mx: 'auto',
           px: 3,
           textAlign: 'center',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)'
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          minHeight: {
+            xs: 'calc(100vh - 100px)', // Adjust this value based on your header/footer height
+            sm: 'calc(100vh - 120px)'
+          },
         }}>
-          {window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en-')).length === 0 ? (
+          {typeof window !== 'undefined' && window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en-')).length === 0 ? (
             // Browser not supported message
             <>
               <Alert severity="error" sx={{ mb: 2 }}>
