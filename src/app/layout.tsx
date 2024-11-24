@@ -93,6 +93,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && <GoogleAnalyticsInit />}
+        <title>英语听写练习</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/icon?<generated>" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-icon?<generated>" />
